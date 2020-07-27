@@ -1,0 +1,112 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Flask boilerplate for any project, include jwt, redis and swagger ui",
+    "version": "0.0.1",
+    "title": "Flask boilerplate",
+    "contact": {
+      "email": "luizgtvgustavo@gmail.com"
+    }
+  },
+  "paths": {
+    "/hello/{name}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "Parameter description in CommonMark or HTML.",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ok"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/bad_request"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/not_found"
+            }
+          }
+        },
+        "summary": "Message to the world",
+        "description": "Return default message",
+        "produces": [
+          "application/json"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization"
+    }
+  },
+  "definitions": {
+    "bad_request": {
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "title": "Success",
+          "description": "Success",
+          "default": false,
+          "example": false
+        },
+        "data": {
+          "type": "object"
+        },
+        "exception": {
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "ok": {
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "title": "Success",
+          "description": "Success",
+          "default": true,
+          "example": true
+        },
+        "data": {
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "not_found": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "description": "msg",
+          "example": "Resource X not found"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
