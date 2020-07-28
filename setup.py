@@ -15,23 +15,23 @@ test_requirements = [
 ]
 
 setup(
-    name='rentomatic',
-    version='0.1.0',
-    description="A clean architecture demo project in Python",
+    name='flask-boilerplate',
+    version='0.0.1',
+    description="A Flask clean architecture boilerplate",
     long_description=readme,
     author="Luiz Gustavo Dias",
     author_email='luizgtvgustavo@gmail.com',
     url='',
     packages=[
-        'flask_base',
+        'flask-boilerplate',
     ],
-    package_dir={'flask_base':
-                 'app'},
+    package_dir={'flask-boilerplate':
+                 'src'},
     include_package_data=True,
     install_requires=requirements,
     license="MIT license",
     zip_safe=False,
-    keywords='flask_base',
+    keywords='flask-boilerplate',
     classifiers=[
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
