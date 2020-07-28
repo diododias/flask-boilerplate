@@ -38,11 +38,23 @@
               "$ref": "#/definitions/UserResponse"
             }
           },
+          "202": {
+            "description": "Accepted",
+            "schema": {
+              "$ref": "#/definitions/accepted"
+            }
+          },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/bad_request"
+            }
           },
           "500": {
-            "description": "Exception"
+            "description": "Exception",
+            "schema": {
+              "$ref": "#/definitions/bad_request"
+            }
           }
         }
       }
@@ -77,10 +89,22 @@
             }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/bad_request"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/not_found"
+            }
           },
           "500": {
-            "description": "Exception"
+            "description": "Exception",
+            "schema": {
+              "$ref": "#/definitions/bad_request"
+            }
           }
         }
       }
@@ -100,6 +124,7 @@
           {
             "in": "header",
             "name": "Authorization",
+            "description": "JWT Token in Authorization Header",
             "type": "string",
             "required": true
           }
@@ -112,10 +137,22 @@
             }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/bad_request"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/not_found"
+            }
           },
           "500": {
-            "description": "Exception"
+            "description": "Exception",
+            "schema": {
+              "$ref": "#/definitions/bad_request"
+            }
           }
         }
       }
@@ -147,10 +184,22 @@
             }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/bad_request"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/not_found"
+            }
           },
           "500": {
-            "description": "Exception"
+            "description": "Exception",
+            "schema": {
+              "$ref": "#/definitions/bad_request"
+            }
           }
         }
       }
@@ -166,63 +215,92 @@
   "definitions": {
     "bad_request": {
       "properties": {
-        "success": {
-          "type": "boolean",
+        "status": {
+          "type": "string",
           "title": "Success",
-          "description": "Success",
-          "default": false,
-          "example": false
+          "description": "Status of request, success or fail",
+          "default": "fail",
+          "example": "fail"
         },
         "data": {
           "type": "object"
         },
-        "exception": {
+        "message": {
           "type": "object"
         }
       },
       "type": "object"
     },
-    "ok": {
+    "accepted": {
       "properties": {
-        "success": {
-          "type": "boolean",
-          "title": "Success",
-          "description": "Success",
-          "default": true,
-          "example": true
+        "status": {
+          "type": "string",
+          "title": "Accepted",
+          "description": "Status of request, success or fail",
+          "default": "success",
+          "example": "success"
         },
         "data": {
           "type": "object"
+        },
+        "message": {
+          "type": "string",
+          "example": "User already exists."
         }
       },
       "type": "object"
     },
     "not_found": {
       "properties": {
+        "status": {
+          "type": "string",
+          "title": "Not Found",
+          "description": "Status of request, success or fail",
+          "default": "fail",
+          "example": "fail"
+        },
+        "data": {
+          "type": "object"
+        },
         "message": {
           "type": "string",
-          "description": "msg",
-          "example": "Resource X not found"
+          "example": "User not found"
         }
       },
       "type": "object"
     },
     "User": {
+      "type": "object",
       "properties": {
         "email": {
-          "type": "string",
           "title": "User email",
-          "description": "Enter a valid email for registration",
-          "example": "teste@test.com"
+          "description": "User email registered",
+          "example": "test@test.com",
+          "required": true,
+          "type": "string"
+        },
+        "first_name": {
+          "title": "First Name",
+          "description": "User First Name",
+          "example": "Bob",
+          "default": null,
+          "type": "string"
+        },
+        "last_name": {
+          "title": "Last Name",
+          "description": "User Last Name",
+          "example": "Scott",
+          "default": null,
+          "type": "string"
         },
         "password": {
           "type": "string",
           "title": "User Password",
           "description": "password used for authentication",
-          "example": 123456
+          "example": "123456",
+          "required": true
         }
-      },
-      "type": "object"
+      }
     },
     "UserResponse": {
       "properties": {
@@ -230,8 +308,8 @@
           "type": "string",
           "title": "Success",
           "description": "Success",
-          "default": true,
-          "example": true
+          "default": "success",
+          "example": "success"
         },
         "data": {
           "type": "object",
@@ -291,13 +369,14 @@
       "type": "object"
     },
     "StatusResponse": {
+      "type": "object",
       "properties": {
         "status": {
           "type": "string",
           "title": "Success",
           "description": "Success",
-          "default": true,
-          "example": true
+          "default": "success",
+          "example": "success"
         },
         "data": {
           "type": "object",
@@ -359,8 +438,7 @@
           "default": [],
           "example": []
         }
-      },
-      "type": "object"
+      }
     }
   },
   "externalDocs": {
