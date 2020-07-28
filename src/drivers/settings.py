@@ -1,9 +1,10 @@
 import os
 
-APP_ENV = os.environ.get('APP_ENV', 'development')
+APP_ENV = os.environ.get('APP_ENV', 'production')
 
 
 class BaseConfig(object):
+   FLASK_ENV = os.environ.get('FLASK_ENV', 'development')
    API_PREFIX = '/'
    CACHE_TYPE = 'redis'
    CACHE_REDIS_URL = 'redis://localhost:6379/0'
@@ -12,7 +13,6 @@ class BaseConfig(object):
    FLASK_DEBUG = os.environ.get('FLASK_DEBUG', False)
    APP_DIR = os.path.abspath(os.path.dirname(__file__))
    PROJECT_ROOT = os.path.abspath(os.path.join(APP_DIR, os.pardir))
-   FLASK_ENV = os.environ.get('FLASK_ENV', 'production')
    CSRF_ENABLED = True
    SECRET_KEY = os.environ.get('SECRET_KEY', '7311a881f138d32a94994cef3e4b855e')
    POSTGRES_USER = os.environ.get('POSTGRES_USER', 'postgres')

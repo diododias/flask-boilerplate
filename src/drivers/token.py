@@ -1,34 +1,25 @@
 import jwt
+import datetime
 
-from hashlib import sha1
 from functools import wraps
 from flask import request
 from src.drivers.settings import APP_ENV, settings_container
-from src.drivers.database.models.token import Token
-from src.drivers.database import db
+from src.drivers.database.models.blacklist_token import BlacklistToken
+from src.drivers.database.models.user import User
 from src.use_cases.request_responses import response_base
 
 
-def encode_auth_token(user_email):
+def encode_auth_token(user_id):
     """
     Generates the Auth Token
     param: user_email
     :return: string
     """
     try:
-        token = Token.query.filter_by(hash=str(sha1(user_email.encode('utf-8')).hexdigest())).first()
-        if token:
-            db.session.delete(token)
-            db.session.commit()
-
-        token = Token(user_email)
-        db.session.add(token)
-        db.session.commit()
-
         payload = {
-            'hash': token.hash,
-            'exp': token.exp,
-            'iat': token.iat
+            'sub': str(user_id),
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
+            'iat': datetime.datetime.utcnow()
         }
 
         return jwt.encode(
@@ -48,8 +39,8 @@ def decode_auth_token(auth_token):
     """
     try:
         payload = jwt.decode(auth_token, settings_container.get(APP_ENV).SECRET_KEY)
-        is_active = BlacklistToken.check_is_active(auth_token)
-        if is_active is False:
+        is_blacklisted = BlacklistToken.check_blacklisted(auth_token)
+        if is_blacklisted:
             return 'Token blacklisted. Please log in again.'
         else:
             return payload['sub']
@@ -78,7 +69,7 @@ def login_required(return_user_id=False):
 
             if auth_token:
                 resp = decode_auth_token(auth_token)
-                if not isinstance(resp, str):
+                if User.check_user_is_registered(resp):
                     if return_user_id:
                         return f(*args, **kwargs, user_id=resp)
                     return f(*args, **kwargs)

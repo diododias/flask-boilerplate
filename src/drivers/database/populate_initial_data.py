@@ -17,6 +17,7 @@ def populate_db():
                     password="admin@123",
                     first_name="default_first_name",
                     last_name="default_last_name",
+                    roles=[role],
                     is_superuser=False)
         db.session.add(user)
         db.session.commit()
