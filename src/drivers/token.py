@@ -6,7 +6,7 @@ from flask import request
 from src.drivers.settings import APP_ENV, settings_container
 from src.drivers.database.models.blacklist_token import BlacklistToken
 from src.drivers.database.models.user import User
-from src.use_cases.request_responses import response_base
+from src.use_cases.request_responses import Responses
 
 
 def encode_auth_token(user_id):
@@ -61,11 +61,7 @@ def login_required(return_user_id=False):
                 else:
                     auth_token = ''
             except Exception as e:
-                response_object = {
-                    'status': 'fail',
-                    'message': 'Invalid auth token header format.'
-                }
-                return response_base(response_object, 401)
+                return Responses.unauthorized(message='Invalid auth token header format.')
 
             if auth_token:
                 resp = decode_auth_token(auth_token)
@@ -77,12 +73,8 @@ def login_required(return_user_id=False):
                     'status': 'fail',
                     'message': resp
                 }
-                return response_base(response_object, 401)
+                return Responses.unauthorized(message=resp)
             else:
-                response_object = {
-                    'status': 'fail',
-                    'message': 'Provide a valid auth token.'
-                }
-                return response_base(response_object, 401)
+                return Responses.unauthorized(message='Provide a valid auth token.')
         return decorated_function
     return decorator

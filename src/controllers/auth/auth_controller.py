@@ -4,7 +4,7 @@ from src.drivers.database import validate_uuid
 from src.drivers.security import bcrypt
 from src.drivers.token import encode_auth_token, decode_auth_token
 from src.drivers.database import db
-from src.use_cases.request_responses import response_base
+from src.use_cases.request_responses import Responses
 from src.drivers.database.models.user import User
 from src.drivers.database.models.blacklist_token import BlacklistToken
 
@@ -33,24 +33,13 @@ class AuthRegisterUser(MethodView):
                 db.session.commit()
                 auth_token = encode_auth_token(user.id)
                 response_object = {
-                    'status': 'success',
-                    'message': 'Successfully registered.',
                     'auth_token': auth_token
                 }
-                return response_base(response_object, 201)
+                return Responses.ok(response_object)
             except Exception as e:
-                print(e)
-                response_object = {
-                    'status': 'fail',
-                    'message': 'Some error occurred. Please try again.'
-                }
-                return response_base(response_object, 401)
+                return Responses.bad_request(str(e))
         else:
-            response_object = {
-                'status': 'fail',
-                'message': 'User already exists.',
-            }
-            return response_base(response_object, 202)
+            return Responses.accepted(message="User alredy exists.")
 
 
 class AuthLogin(MethodView):
@@ -68,30 +57,15 @@ class AuthLogin(MethodView):
                     auth_token = encode_auth_token(user.id)
                     if auth_token:
                         response_object = {
-                            'status': 'success',
-                            'message': 'Successfully logged in.',
                             'auth_token': auth_token
                         }
-                        return response_base(response_object, 200)
+                        return Responses.ok(data=response_object)
                 else:
-                    response_object = {
-                        'status': 'fail',
-                        'message': 'Bad password.'
-                    }
-                    return response_base(response_object, 500)
+                    return Responses.bad_request(message="Bad password.")
             else:
-                response_object = {
-                    'status': 'fail',
-                    'message': 'Valid user is required'
-                }
-                return response_base(response_object, 404)
+                return Responses.not_found('User not found.')
         except Exception as e:
-            print(e)
-            response_object = {
-                'status': 'fail',
-                'message': 'Try again'
-            }
-            return response_base(response_object, 500)
+            return Responses.bad_request(message=str(e))
 
 
 class AuthLogout(MethodView):
@@ -109,29 +83,13 @@ class AuthLogout(MethodView):
                 try:
                     db.session.add(blacklist_token)
                     db.session.commit()
-                    response_object = {
-                        'status': 'success',
-                        'message': 'Successfully logged out.'
-                    }
-                    return response_base(response_object, 200)
+                    return Responses.ok(message='Successfully logged out.')
                 except Exception as e:
-                    response_object = {
-                        'status': 'fail',
-                        'message': str(e)
-                    }
-                    return response_base(response_object, 200)
+                    return Responses.bad_request(message=str(e))
             else:
-                response_object = {
-                    'status': 'fail',
-                    'message': resp
-                }
-                return response_base(response_object, 401)
+                return Responses.bad_request(message=resp)
         else:
-            response_object = {
-                'status': 'fail',
-                'message': 'Provide a valid authorization header.'
-            }
-            return response_base(response_object, 403)
+            return Responses.bad_request(message='Provide a valid authorization header.')
 
 
 class AuthTokenStatus(MethodView):
@@ -145,8 +103,6 @@ class AuthTokenStatus(MethodView):
             if validate_uuid(resp):
                 user = User.query.filter_by(id=resp).first()
                 response_object = {
-                    'status': 'success',
-                    'data': {
                         'user_id': str(user.id),
                         'email': user.email,
                         'first_name': user.first_name,
@@ -155,19 +111,10 @@ class AuthTokenStatus(MethodView):
                         'is_superuser': user.is_superuser,
                         'created': str(user.created_at)
                     }
-                }
-                return response_base(response_object, 200)
-            response_object = {
-                'status': 'fail',
-                'message': resp
-            }
-            return response_base(response_object, 401)
+                return Responses.ok(data=response_object)
+            return Responses.unauthorized(message=resp)
         else:
-            response_object = {
-                'status': 'fail',
-                'message': 'Provide a valid auth token.'
-            }
-            return response_base(response_object, 401)
+            return Responses.bad_request(message='Provide a valid auth token.')
         
         
 auth_blueprint.add_url_rule(
