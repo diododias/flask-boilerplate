@@ -1,27 +1,25 @@
-from src.models.user import User
-from src.models.role import Role
+from src.resources.database.models.user import UserModel
+from src.resources.database.models.role import RoleModel
+from src.resources.database.repository.repository_base import RepositoryBase
+from src.resources.settings import settings_container, APP_ENV
 
 
-def populate_db(db):
-    role = Role.query.filter_by(name="default").first()
-    if not role:
-        role = Role(name="default")
-        db.session.add(role)
-        db.session.commit()
-        db.session.refresh(role)
+class PopulateInitialData(RepositoryBase):
 
-    user = User.query.filter_by(email="default").first()
-    if not user:
-        user = User(email="default",
-                    password="admin@123",
-                    first_name="default_first_name",
-                    last_name="default_last_name",
-                    roles=[role],
-                    is_superuser=False)
-        db.session.add(user)
-        db.session.commit()
-        db.session.refresh(user)
-        user.roles.append(role)
-        db.session.add(user)
-        db.session.commit()
-        db.session.refresh(user)
+    def start_populate(self):
+        role = RoleModel.query.filter_by(name="default").first()
+        if not role:
+            role = RoleModel(name="default")
+            self.insert_row(role)
+
+        user = UserModel.query.filter_by(email=settings_container.get(APP_ENV).FIRST_SUPERUSER).first()
+        if not user:
+            user = UserModel(email=settings_container.get(APP_ENV).FIRST_SUPERUSER,
+                             password=settings_container.get(APP_ENV).FIRST_SUPERUSER_PASSWORD,
+                             first_name="default_first_name",
+                             last_name="default_last_name",
+                             roles=[role],
+                             is_superuser=True)
+            self.insert_row(user)
+            user.roles.append(role)
+            self.insert_row(user)

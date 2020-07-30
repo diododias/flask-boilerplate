@@ -1,10 +1,10 @@
 import uuid
 
 from datetime import datetime
-from src.models.users_roles import users_roles
 from sqlalchemy.dialects.postgresql import UUID
 from src.resources.database import db
 from src.resources.security import bcrypt
+from src.resources.database.models.users_roles import users_roles
 
 
 class UserModel(db.Model):
@@ -17,7 +17,7 @@ class UserModel(db.Model):
     last_name = db.Column(db.String, index=True)
     is_superuser = db.Column(db.Boolean(), default=False)
     roles = db.relationship(
-        "Role", secondary=users_roles, back_populates="users"
+        "RoleModel", secondary=users_roles, back_populates="users"
     )
     created_at = db.Column(db.DateTime, default=datetime.utcnow(), index=True)
 

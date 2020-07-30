@@ -1,10 +1,10 @@
 import json
 import inspect
 
-from hashlib import md5
+from hashlib import sha256
 from base64 import b64encode
 from flask_caching import Cache, function_namespace
-from src.frameworks_and_drivers.settings import settings_container, APP_ENV
+from src.resources.settings import settings_container, APP_ENV
 
 
 class ResourceCache(Cache):
@@ -26,7 +26,7 @@ class ResourceCache(Cache):
                 kwargs=kwargs), sort_keys=True)
 
             return b64encode(
-                md5(updated.encode('utf-8')).digest()
+                sha256(updated.encode('utf-8')).digest()
             )[:16].decode('utf-8')
 
         return make_cache_key

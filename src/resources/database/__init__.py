@@ -1,6 +1,5 @@
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.dialects.postgresql import UUID
 
 
 db = SQLAlchemy()
@@ -17,13 +16,3 @@ def init_app(app):
     def shutdown_db_session(exception=None):
         db.session.remove()
 
-
-def validate_uuid(uuid):
-    try:
-        uuid_obj = UUID(uuid)
-        if uuid_obj:
-            return True
-        else:
-            return False
-    except ValueError:
-        return False

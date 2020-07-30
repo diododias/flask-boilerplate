@@ -1,4 +1,4 @@
-from src.controllers.auth.auth_controller import auth_blueprint
+from src.controllers.auth_controller import auth_blueprint
 
 
 def register_blueprints(app):

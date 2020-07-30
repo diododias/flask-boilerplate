@@ -21,4 +21,3 @@ class BlacklistTokenModel(db.Model):
 
     def __repr__(self):
         return f'<id: token: {self.token}>'
-

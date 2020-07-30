@@ -1,63 +1,67 @@
-from flask.views import MethodView
-from flask import request, Blueprint
-from src.drivers.core_container import CoreContainer
-from src.models.user import User
-from src.use_cases.user_usecases import UserUseCase
+from flask import Blueprint
+from src.resources.database import db
+from src.resources.security import bcrypt
+from src.controllers.controller_base import ControllerResourceBase
+from src.aplication_business.services.user_service import UserService
+from src.aplication_business.services.token_service import TokenService
+from src.aplication_business.services.password_service import PasswordService
+from src.resources.database.repository.user_repository import UserRepository
+from src.resources.database.repository.blacklist_token_repository import BlacklistTokenRepository
+
 
 auth_blueprint = Blueprint('auth_api', __name__)
 
-db = CoreContainer.db
-bcrypt = CoreContainer.bcrypt
+
+class AuthControllerBase(ControllerResourceBase):
+    @classmethod
+    def _create_user_service(cls):
+        return UserService(
+            repository=UserRepository(
+                database_engine=db
+            ),
+            token_service=TokenService(
+                repository=BlacklistTokenRepository(database_engine=db)
+            ),
+            password_service=PasswordService(bcrypt)
+        )
 
 
-class AuthRegisterUser(MethodView):
+class AuthRegisterUser(AuthControllerBase):
     """
     User Registration Resource
     """
-
     def post(self):
-        post_data = request.get_json()
-        user_usecase = UserUseCase(user_model=User, database_engine=CoreContainer.db)
-        return user_usecase.register_user(post_data)
+        user_service = self._create_user_service()
+        return user_service.register_user(self.get_json())
 
 
-class AuthLogin(MethodView):
+class AuthLogin(AuthControllerBase):
     """
     User Login Resource
     """
     def post(self):
-        post_data = request.get_json()
-        user_usecase = UserUseCase(user_model=User,
-                                   database_engine=CoreContainer.db,
-                                   encrypt_engine=CoreContainer.bcrypt)
-        return user_usecase.login_user(post_data)
+        user_service = self._create_user_service()
+        return user_service.login_user(self.get_json())
 
 
-class AuthLogout(MethodView):
+class AuthLogout(AuthControllerBase):
     """
-        Logout Resource
-        """
-
+    Logout Resource
+    """
     def post(self):
-        auth_token = request.headers.get('Authorization', None)
-        user_usecase = UserUseCase(user_model=User,
-                                   database_engine=CoreContainer.db,
-                                   encrypt_engine=CoreContainer.bcrypt)
-        return user_usecase.login_user(auth_token)
+        user_service = self._create_user_service()
+        return user_service.logout_user(self.get_token())
 
 
-class AuthTokenStatus(MethodView):
+class AuthTokenStatus(AuthControllerBase):
     """
     Token Status
     """
     def post(self):
-        auth_token = request.headers.get('Authorization', None)
-        user_usecase = UserUseCase(user_model=User,
-                                   database_engine=CoreContainer.db,
-                                   encrypt_engine=CoreContainer.bcrypt)
-        return user_usecase.logout_user(auth_token)
-        
-        
+        user_service = self._create_user_service()
+        return user_service.status_user(self.get_token())
+
+
 auth_blueprint.add_url_rule(
     '/auth/register',
     view_func=AuthRegisterUser.as_view('auth_register'),
