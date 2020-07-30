@@ -4,11 +4,12 @@ APP_ENV = os.environ.get('APP_ENV', 'production')
 
 
 class BaseConfig(object):
+   PORT = os.environ.get('PORT', 5000)
    FLASK_ENV = os.environ.get('FLASK_ENV', 'development')
    API_PREFIX = '/'
-   CACHE_TYPE = 'redis'
-   CACHE_REDIS_URL = 'redis://localhost:6379/0'
-   CACHE_DEFAULT_TIMEOUT = 300
+   CACHE_TYPE = os.environ.get('CACHE_TYPE', 'redis')
+   CACHE_REDIS_URL = os.environ.get('CACHE_REDIS_URL', 'redis://localhost:6379/0')
+   CACHE_DEFAULT_TIMEOUT = os.environ.get('CAHCE_DEFAULT_TIMEOUT', 300)
    TESTING = False
    FLASK_DEBUG = os.environ.get('FLASK_DEBUG', False)
    APP_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -42,7 +43,6 @@ class TestConfig(BaseConfig):
    FLASK_ENV = 'test'
    ENV = FLASK_ENV
    TESTING = True
-   DEBUG = True
 
 
 settings_container = {

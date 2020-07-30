@@ -27,7 +27,7 @@
             "description": "User Object",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/RegisterUser"
             }
           }
         ],
@@ -77,7 +77,7 @@
             "description": "User Object",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/LoginUser"
             }
           }
         ],
@@ -269,7 +269,7 @@
       },
       "type": "object"
     },
-    "User": {
+    "RegisterUser": {
       "type": "object",
       "properties": {
         "email": {
@@ -300,6 +300,25 @@
           "example": "123456",
           "required": true
         }
+      }
+    },
+    "LoginUser": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "title": "User email",
+          "description": "User email registered",
+          "example": "test@test.com",
+          "required": true,
+          "type": "string"
+        },
+        "password": {
+          "type": "string",
+          "title": "User Password",
+          "description": "password used for authentication",
+          "example": "123456"
+        },
+        "required": true
       }
     },
     "UserResponse": {

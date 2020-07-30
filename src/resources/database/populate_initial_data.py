@@ -1,9 +1,8 @@
-from src.drivers.database import db
-from src.drivers.database.models.user import User
-from src.drivers.database.models.role import Role
+from src.models.user import User
+from src.models.role import Role
 
 
-def populate_db():
+def populate_db(db):
     role = Role.query.filter_by(name="default").first()
     if not role:
         role = Role(name="default")

@@ -59,7 +59,7 @@ class Responses:
     def bad_request(message: str or dict or list = list()) -> Response:
         """
         Response bad request return status code 400
-        :param response_value: json data returned to api consumer
+        :param message: json data returned to api consumer
         :return: Response object
         """
         return Responses.response_base(message=message, status_code=400, status_message="fail")
@@ -81,3 +81,12 @@ class Responses:
         :return: Response object
         """
         return Responses.response_base(message=message, status_code=401, status_message="fail")
+
+    @staticmethod
+    def invalid_entity(message: dict or list or str = "Invalid field") -> Response:
+        """
+        Response type not found return status code 404
+        :param message: display error message
+        :return: Response object
+        """
+        return Responses.response_base(message=message, status_code=422, status_message="fail")

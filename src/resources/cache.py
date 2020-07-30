@@ -1,8 +1,10 @@
 import json
 import inspect
-from base64 import b64encode
+
 from hashlib import md5
+from base64 import b64encode
 from flask_caching import Cache, function_namespace
+from src.frameworks_and_drivers.settings import settings_container, APP_ENV
 
 
 class ResourceCache(Cache):
@@ -31,15 +33,14 @@ class ResourceCache(Cache):
 
     @staticmethod
     def _extract_self_arg(f, args):
-        argspec_args = inspect.getargspec(f).args
+        argspec_args = inspect.getfullargspec(f).args
         if argspec_args and argspec_args[0] in ('self', 'cls'):
             return args[1:]
         return args
 
 
 cache = ResourceCache(config={
-        'CACHE_TYPE': 'redis',
-        'CACHE_REDIS_URL': 'redis://localhost:6379/0',
-        'CACHE_DEFAULT_TIMEOUT': 300
-    })
-
+            'CACHE_TYPE': 'redis',
+            'CACHE_REDIS_URL': settings_container.get(APP_ENV).CACHE_REDIS_URL,
+            'CACHE_DEFAULT_TIMEOUT': settings_container.get(APP_ENV).CACHE_REDIS_URL
+        })

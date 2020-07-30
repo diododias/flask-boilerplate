@@ -1,13 +1,13 @@
 import uuid
 
 from datetime import datetime
+from src.models.users_roles import users_roles
 from sqlalchemy.dialects.postgresql import UUID
-from src.drivers.database import db
-from src.drivers.database.models.users_roles import users_roles
-from src.drivers.security import bcrypt
+from src.resources.database import db
+from src.resources.security import bcrypt
 
 
-class User(db.Model):
+class UserModel(db.Model):
     __tablename__ = "users"
 
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
@@ -28,6 +28,9 @@ class User(db.Model):
         self.password = bcrypt.generate_password_hash(password).decode()
         self.roles = roles
         self.is_superuser = is_superuser
+
+    def __repr__(self):
+        return f'<id: User: {self.email}>'
 
 
 

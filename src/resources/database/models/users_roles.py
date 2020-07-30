@@ -1,5 +1,5 @@
-from src.drivers.database import db
 from sqlalchemy.dialects.postgresql import UUID
+from src.resources.database import db
 
 
 users_roles = db.Table(

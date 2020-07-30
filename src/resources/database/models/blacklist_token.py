@@ -1,11 +1,11 @@
 import uuid
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from sqlalchemy.dialects.postgresql import UUID
-from src.drivers.database import db
+from src.resources.database import db
 
 
-class BlacklistToken(db.Model):
+class BlacklistTokenModel(db.Model):
     """
     Token Model for storing Blacklisted JWT tokens
     """
@@ -20,12 +20,5 @@ class BlacklistToken(db.Model):
         self.blacklisted_on = datetime.now()
 
     def __repr__(self):
-        return '<id: token: {}'.format(self.token)
+        return f'<id: token: {self.token}>'
 
-    @staticmethod
-    def check_blacklisted(auth_token):
-        res = BlacklistToken.query.filter_by(token=str(auth_token)).first()
-        if res:
-            return True
-        else:
-            return False
