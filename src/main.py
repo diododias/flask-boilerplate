@@ -1,8 +1,9 @@
-import logging
 import os
+import logging
 
 from flask import Flask
-from src.drivers.rest.app_setup import init_app
+from src.resources.app_setup import init_app
+from src.resources.settings import settings_container, APP_ENV
 
 logging.basicConfig(level=logging.DEBUG,
                     format='[%(asctime)s]: {} %(levelname)s %(message)s'.format(os.getpid()),
@@ -19,4 +20,4 @@ def create_app():
 
 if __name__ == "__main__":
     app = create_app()
-    app.run(debug=os.environ.get('DEBUG', False), host="0.0.0.0", port=5000)
+    app.run(debug=os.environ.get('DEBUG', False), host="0.0.0.0", port=settings_container.get(APP_ENV).port)

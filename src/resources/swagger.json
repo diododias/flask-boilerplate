@@ -1,0 +1,467 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Flask boilerplate for any project, include jwt token, redis and swagger ui",
+    "version": "0.0.1",
+    "title": "Flask boilerplate",
+    "contact": {
+      "email": "luizgtvgustavo@gmail.com"
+    }
+  },
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Register new user",
+        "description": "Register new user",
+        "operationId": "AuthRegisterUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User Object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/UserResponse"
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "schema": {
+              "$ref": "#/definitions/accepted"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/bad_request"
+            }
+          },
+          "500": {
+            "description": "Exception",
+            "schema": {
+              "$ref": "#/definitions/bad_request"
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "User login",
+        "description": "Login user and return JWT token",
+        "operationId": "AuthLogin",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User Object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/UserResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/bad_request"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/not_found"
+            }
+          },
+          "500": {
+            "description": "Exception",
+            "schema": {
+              "$ref": "#/definitions/bad_request"
+            }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "User logout",
+        "description": "logout user and invalidate JWT token",
+        "operationId": "AuthLogout",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "description": "JWT Token in Authorization Header",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/LogoutResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/bad_request"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/not_found"
+            }
+          },
+          "500": {
+            "description": "Exception",
+            "schema": {
+              "$ref": "#/definitions/bad_request"
+            }
+          }
+        }
+      }
+    },
+    "/auth/status": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "User status",
+        "description": "Get all information about user by JWT Token",
+        "operationId": "AuthStatus",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/StatusResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/bad_request"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/not_found"
+            }
+          },
+          "500": {
+            "description": "Exception",
+            "schema": {
+              "$ref": "#/definitions/bad_request"
+            }
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization"
+    }
+  },
+  "definitions": {
+    "bad_request": {
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Success",
+          "description": "Status of request, success or fail",
+          "default": "fail",
+          "example": "fail"
+        },
+        "data": {
+          "type": "object"
+        },
+        "message": {
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
+    "accepted": {
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Accepted",
+          "description": "Status of request, success or fail",
+          "default": "success",
+          "example": "success"
+        },
+        "data": {
+          "type": "object"
+        },
+        "message": {
+          "type": "string",
+          "example": "User already exists."
+        }
+      },
+      "type": "object"
+    },
+    "not_found": {
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Not Found",
+          "description": "Status of request, success or fail",
+          "default": "fail",
+          "example": "fail"
+        },
+        "data": {
+          "type": "object"
+        },
+        "message": {
+          "type": "string",
+          "example": "User not found"
+        }
+      },
+      "type": "object"
+    },
+    "RegisterUser": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "title": "User email",
+          "description": "User email registered",
+          "example": "test@test.com",
+          "required": true,
+          "type": "string"
+        },
+        "first_name": {
+          "title": "First Name",
+          "description": "User First Name",
+          "example": "Bob",
+          "default": null,
+          "type": "string"
+        },
+        "last_name": {
+          "title": "Last Name",
+          "description": "User Last Name",
+          "example": "Scott",
+          "default": null,
+          "type": "string"
+        },
+        "password": {
+          "type": "string",
+          "title": "User Password",
+          "description": "password used for authentication",
+          "example": "123456",
+          "required": true
+        }
+      }
+    },
+    "LoginUser": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "title": "User email",
+          "description": "User email registered",
+          "example": "test@test.com",
+          "required": true,
+          "type": "string"
+        },
+        "password": {
+          "type": "string",
+          "title": "User Password",
+          "description": "password used for authentication",
+          "example": "123456"
+        },
+        "required": true
+      }
+    },
+    "UserResponse": {
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Success",
+          "description": "Success",
+          "default": "success",
+          "example": "success"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "auth_token": {
+              "type": "string",
+              "title": "Authentication token",
+              "description": "JWT Token generated by registration/login",
+              "default": null,
+              "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3ZjQ2MTgxZS01MzYxLTQzMTItYTI3NC03ZTc2NGM3NjRlNzkiLCJleHAiOjE1OTYwNTEzNTEsImlhdCI6MTU5NTk2NDk1MX0.x4lSiheojwsA5VBh7PxdiBLnnXHXEBPKkCETVl9FENg"
+            }
+          }
+        },
+        "message": {
+          "type": "array",
+          "title": "message information",
+          "description": "message information to the user",
+          "default": [],
+          "example": [],
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "type": "object"
+    },
+    "LogoutResponse": {
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Success",
+          "description": "Success",
+          "default": true,
+          "example": true
+        },
+        "data": {
+          "title": "data returned",
+          "description": "Data returned by API",
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "example": [],
+          "default": []
+        },
+        "message": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "title": "message information",
+          "description": "message information to the user",
+          "default": [],
+          "example": "Successfully logged out."
+        }
+      },
+      "type": "object"
+    },
+    "StatusResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "title": "Success",
+          "description": "Success",
+          "default": "success",
+          "example": "success"
+        },
+        "data": {
+          "type": "object",
+          "properties": {
+            "user_id": {
+              "title": "User id",
+              "example": "7f46181e-5361-4312-a274-7e764c764e79",
+              "description": "User UUID from database",
+              "type": "string"
+            },
+            "email": {
+              "title": "User email",
+              "description": "User email registered",
+              "example": "test@test.com",
+              "type": "string"
+            },
+            "first_name": {
+              "title": "First Name",
+              "description": "User First Name",
+              "example": "Bob",
+              "type": "string"
+            },
+            "last_name": {
+              "title": "Last Name",
+              "description": "User Last Name",
+              "example": "Scott",
+              "type": "string"
+            },
+            "roles": {
+              "title": "Roles",
+              "description": "User Roles enabled for user",
+              "example": [],
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "is_superuser": {
+              "title": "Is super user",
+              "description": "User have administrative credentials?",
+              "example": false,
+              "type": "boolean"
+            },
+            "created": {
+              "title": "Registered date",
+              "description": "registered date for user",
+              "example": "2020-01-01 00:00:00",
+              "type": "string"
+            }
+          }
+        },
+        "message": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          },
+          "title": "message information",
+          "description": "message information to the user",
+          "default": [],
+          "example": []
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
