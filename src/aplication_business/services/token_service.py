@@ -1,8 +1,7 @@
 import jwt
-from datetime import datetime, timedelta
-
-from flask import request
 from functools import wraps
+from flask import request, abort
+from datetime import datetime, timedelta
 from src.aplication_business.services.responses_service import Responses
 from src.resources.settings import settings_container, APP_ENV
 from src.resources.database.repository.blacklist_token_repository import BlacklistTokenRepository
@@ -58,13 +57,13 @@ class TokenService:
             payload = jwt.decode(auth_token, settings_container.get(APP_ENV).SECRET_KEY)
             is_blacklisted = self.is_blacklisted(auth_token)
             if is_blacklisted:
-                return 'Token blacklisted. Please log in again.'
+                abort(Responses.invalid_entity('Token blacklisted. Please log in again.'))
             else:
-                return payload['sub']
+                return {'user_id': payload['sub'], 'auth_token': auth_token}
         except jwt.ExpiredSignatureError:
-            return 'Signature expired. Please log in again.'
+            abort(Responses.invalid_entity('Signature expired. Please log in again.'))
         except jwt.InvalidTokenError:
-            return 'Invalid token. Please log in again.'
+            abort(Responses.invalid_entity('Invalid token. Please log in again.'))
 
     def login_required(self, return_user_id=False):
         def decorator(f):
@@ -77,7 +76,7 @@ class TokenService:
                     else:
                         auth_token = ''
                 except Exception as e:
-                    return Responses.unauthorized(message='Invalid auth token header format.')
+                    return abort(Responses.unauthorized(message='Invalid auth token header format.'))
 
                 if auth_token:
                     resp = self.decode_auth_token(auth_token)
@@ -85,8 +84,8 @@ class TokenService:
                         if return_user_id:
                             return f(*args, **kwargs, user_id=resp)
                         return f(*args, **kwargs)"""
-                    return Responses.unauthorized(message=resp)
+                    return abort(Responses.unauthorized(message=resp))
                 else:
-                    return Responses.unauthorized(message='Provide a valid auth token.')
+                    return abort(Responses.unauthorized(message='Provide a valid auth token.'))
             return decorated_function
         return decorator

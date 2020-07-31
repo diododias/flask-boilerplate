@@ -1,7 +1,7 @@
 from flask_cors import CORS
 from swagger_ui import flask_api_doc
 
-from src.controllers import register_blueprints
+from src.interface_adapters.controllers import register_blueprints
 from src.resources.cache import cache
 from src.resources.database import db
 from src.resources.security import bcrypt

@@ -1,4 +1,3 @@
-from src.resources.database.helpers import validate_uuid
 from src.aplication_business.services.token_service import TokenService
 from src.aplication_business.services.responses_service import Responses
 from src.resources.database.repository.user_repository import UserRepository
@@ -22,20 +21,7 @@ class UserService:
         else:
             return False
 
-    def _validate_fields(self, post_data: dict) -> Responses.response_base:
-        if self._value_is_none_or_empty(post_data.get('email')):
-            return Responses.invalid_entity(f'Invalid value to email field.')
-        if self._value_is_none_or_empty(post_data.get('password')):
-            return Responses.invalid_entity(f'Invalid value to password field.')
-
-        if post_data.get('roles', None) is not None:
-            del post_data['roles']
-
-        if post_data.get('is_superuser', None) is not None:
-            del post_data['is_superuser']
-
     def register_user(self, post_data: dict) -> Responses.response_base:
-        self._validate_fields(post_data)
         user = self._user_usecase.find_user_by_email(post_data.get('email'))
         if not user:
             try:
@@ -51,7 +37,6 @@ class UserService:
 
     def login_user(self, post_data: dict) -> Responses.response_base():
         try:
-            self._validate_fields(post_data)
             user = self._user_usecase.find_user_by_email(post_data.get('email'))
             if user:
                 if self._password_service.check_password(user.password, post_data.get('password')):
@@ -70,32 +55,19 @@ class UserService:
         except Exception as e:
             return Responses.bad_request(message=str(e))
 
-    def logout_user(self, auth_token) -> Responses.response_base():
-        if auth_token:
-            resp = self._token_service.decode_auth_token(auth_token)
-            if validate_uuid(resp):
-                self._token_service.include_token_blacklist(auth_token)
-                return Responses.ok(message='Successfully logged out.')
-            else:
-                return Responses.bad_request(message=resp)
-        else:
-            return Responses.bad_request(message='Provide a valid authorization header.')
+    def logout_user(self, auth_token: str) -> Responses.response_base():
+        self._token_service.include_token_blacklist(auth_token)
+        return Responses.ok(message='Successfully logged out.')
 
-    def status_user(self, auth_token) -> Responses.response_base():
-        if auth_token:
-            resp = self._token_service.decode_auth_token(auth_token)
-            if validate_uuid(resp):
-                user = self._user_usecase.find_user_by_id(resp)
-                response_object = {
-                        'user_id': str(user.id),
-                        'email': user.email,
-                        'first_name': user.first_name,
-                        'last_name': user.last_name,
-                        'roles': user.roles,
-                        'is_superuser': user.is_superuser,
-                        'created': str(user.created_at)
-                    }
-                return Responses.ok(data=response_object)
-            return Responses.unauthorized(message=resp)
-        else:
-            return Responses.bad_request(message='Provide a valid auth token.')
+    def status_user(self, user_id: str) -> Responses.response_base():
+        user = self._user_usecase.find_user_by_id(user_id)
+        response_object = {
+            'user_id': str(user.id),
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'roles': user.roles,
+            'is_superuser': user.is_superuser,
+            'created': str(user.created_at)
+        }
+        return Responses.ok(data=response_object)
