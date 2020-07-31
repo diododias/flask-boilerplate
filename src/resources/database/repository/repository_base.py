@@ -19,5 +19,3 @@ class RepositoryBase:
     def remove_row(self, entity: db.Model):
         self._database_engine.session.delete(entity)
         self._database_engine.session.commit()
-
-

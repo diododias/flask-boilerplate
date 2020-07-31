@@ -40,7 +40,7 @@ class ResourceCache(Cache):
 
 
 cache = ResourceCache(config={
-            'CACHE_TYPE': 'redis',
-            'CACHE_REDIS_URL': settings_container.get(APP_ENV).CACHE_REDIS_URL,
-            'CACHE_DEFAULT_TIMEOUT': settings_container.get(APP_ENV).CACHE_REDIS_URL
-        })
+    'CACHE_TYPE': 'redis',
+    'CACHE_REDIS_URL': settings_container.get(APP_ENV).CACHE_REDIS_URL,
+    'CACHE_DEFAULT_TIMEOUT': settings_container.get(APP_ENV).CACHE_REDIS_URL
+})

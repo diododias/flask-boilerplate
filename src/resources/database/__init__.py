@@ -15,4 +15,3 @@ def init_app(app):
     @app.teardown_appcontext
     def shutdown_db_session(exception=None):
         db.session.remove()
-

@@ -30,3 +30,4 @@ flask_bcrypt
 flask_cors
 dependency_injector
 marshmallow
+flake8

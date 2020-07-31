@@ -14,8 +14,7 @@ class TokenService:
         self._blacklist_token_usecase = BlacklistTokenUsecase(repository=repository)
 
     def is_blacklisted(self, auth_token):
-        result = self._blacklist_token_usecase.find_token(auth_token)
-        if result:
+        if self._blacklist_token_usecase.find_token(auth_token):
             return True
         else:
             return False
@@ -75,7 +74,7 @@ class TokenService:
                         auth_token = auth_header.split(" ")[1]
                     else:
                         auth_token = ''
-                except Exception as e:
+                except Exception:
                     return abort(Responses.unauthorized(message='Invalid auth token header format.'))
 
                 if auth_token:

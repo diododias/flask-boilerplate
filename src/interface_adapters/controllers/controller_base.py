@@ -25,4 +25,3 @@ class ControllerResourceBase(MethodView):
     @classmethod
     def get_user_id(cls):
         return cls.validate_token().get('user_id')
-

@@ -33,6 +33,3 @@ class UserUseCase(UsecaseBase):
     def find_user_by_id(self, id: UUID(as_uuid=True)):
         cursor = self.repository.filter_by_id(id)
         return self._create_user_entity(cursor)
-
-
-

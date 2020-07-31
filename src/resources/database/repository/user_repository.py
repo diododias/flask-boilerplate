@@ -27,5 +27,3 @@ class UserRepository(RepositoryBase):
 
     def filter_by_id(self, value: str):
         return self._user_model.query.filter_by(id=value).first()
-
-
