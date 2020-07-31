@@ -29,4 +29,4 @@ Werkzeug==0.16.1
 flask_bcrypt
 flask_cors
 dependency_injector
-flask_request_validator
+marshmallow
