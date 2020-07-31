@@ -1,5 +1,5 @@
 from src.resources.database import db
-from src.resources.database.models.user import UserModel
+from src.resources.database.models.users_model import Users
 from src.resources.database.repository.repository_base import RepositoryBase
 
 
@@ -9,7 +9,7 @@ class UserRepository(RepositoryBase):
     """
     def __init__(self, database_engine: db):
         super().__init__(database_engine)
-        self._user_model = UserModel
+        self._user_model = Users
 
     def create_user(self, post_data: dict):
         user = self._user_model(

@@ -79,7 +79,7 @@ class TokenService:
 
                 if auth_token:
                     resp = self.decode_auth_token(auth_token)
-                    """if UserModel.check_user_is_registered(resp):
+                    """if Users.check_user_is_registered(resp):
                         if return_user_id:
                             return f(*args, **kwargs, user_id=resp)
                         return f(*args, **kwargs)"""
