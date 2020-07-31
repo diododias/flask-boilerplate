@@ -1,3 +1,4 @@
+from flask import abort
 from src.aplication_business.services.token_service import TokenService
 from src.aplication_business.services.responses_service import Responses
 from src.resources.database.repository.user_repository import UserRepository
@@ -61,6 +62,8 @@ class UserService:
 
     def status_user(self, user_id: str) -> Responses.response_base():
         user = self._user_usecase.find_user_by_id(user_id)
+        if user is None:
+            abort(Responses.invalid_entity("Invalid token"))
         response_object = {
             'user_id': str(user.id),
             'email': user.email,
