@@ -31,3 +31,5 @@ flask_cors
 dependency_injector
 marshmallow
 flake8
+mock
+pytest_mock

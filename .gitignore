@@ -1,8 +1,5 @@
 *pyc
 *venv
-venv/
+venv/*
 migrations/*
 .scannerwork/*
-
-
-

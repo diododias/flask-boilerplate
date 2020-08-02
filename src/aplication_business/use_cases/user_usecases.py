@@ -8,7 +8,7 @@ class UserUseCase(UsecaseBase):
 
     @staticmethod
     def _create_user_entity(cursor: db.Model):
-        if cursor is not db.Model:
+        if not isinstance(cursor, type(db.Model)):
             return cursor
         return UserEntity(
             id=cursor.id,
@@ -31,5 +31,5 @@ class UserUseCase(UsecaseBase):
         return self._create_user_entity(cursor)
 
     def find_user_by_id(self, id: UUID(as_uuid=True)):
-        cursor = self.repository.filter_by_id(id)
+        cursor = self.repository.filter_by_id(value=id)
         return self._create_user_entity(cursor)

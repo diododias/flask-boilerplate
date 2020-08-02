@@ -21,7 +21,7 @@ class PopulateInitialData(RepositoryBase):
                 last_name="default_last_name",
                 roles=[role],
                 is_superuser=True
-             )
+            )
             self.insert_row(user)
             user.roles.append(role)
             self.insert_row(user)
