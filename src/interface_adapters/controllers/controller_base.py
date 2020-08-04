@@ -1,22 +1,31 @@
 from flask import request, abort
 from flask.views import MethodView
-from src.aplication_business.services.responses_service import Responses
-from src.interface_adapters.validator import DataValidator
+from src.application_business.services.responses_service import Responses
+from src.resources.flasksrc.input_validator import InputValidator
 
 
 class ControllerResourceBase(MethodView):
+
+    @classmethod
+    def get_headers(cls):
+        return request.headers
+
+    @classmethod
+    def get_json(cls):
+        return request.get_json()
+
     @classmethod
     def get_json_with_schema(cls, schema):
-        post_data = request.get_json()
+        post_data = cls.get_json()
         if not isinstance(post_data, dict):
             abort(Responses.invalid_entity('Invalid json.'))
-        return DataValidator.validate_json(schema=schema, json_data=post_data)
+        return InputValidator.validate_json(schema=schema, json_data=post_data)
 
     @classmethod
     def validate_token(cls):
-        if request.headers.get('Authorization', None) is None:
+        if cls.get_headers().get('Authorization', None) is None:
             abort(Responses.invalid_entity('Missing Authorization header.'))
-        return DataValidator.validate_token(request.headers.get('Authorization'))
+        return InputValidator.validate_token(cls.get_headers().get('Authorization'))
 
     @classmethod
     def get_token(cls):

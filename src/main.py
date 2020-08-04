@@ -2,7 +2,7 @@ import os
 import logging
 
 from flask import Flask
-from src.resources.app_setup import init_app
+from src.resources.flasksrc.app_setup import init_app
 from src.resources.settings import settings_container, APP_ENV
 
 logging.basicConfig(level=logging.DEBUG,

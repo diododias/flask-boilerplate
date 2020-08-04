@@ -5,17 +5,13 @@ class RepositoryBase:
     """
     Interface to access database user model
     """
-    _database_engine: db
+    _db_session: db.session
 
-    def __init__(self, database_engine: db):
-        self._database_engine = database_engine
+    def __init__(self, db_session: db.session):
+        self._db_session = db_session
 
-    def insert_row(self, entity: db.Model):
-        self._database_engine.session.add(entity)
-        self._database_engine.session.commit()
-        self._database_engine.session.refresh(entity)
+    def _insert_row(self, entity: db.Model):
+        self._db_session.add(entity)
+        self._db_session.commit()
+        self._db_session.refresh(entity)
         return entity
-
-    def remove_row(self, entity: db.Model):
-        self._database_engine.session.delete(entity)
-        self._database_engine.session.commit()
