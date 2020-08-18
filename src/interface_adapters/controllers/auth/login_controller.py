@@ -7,5 +7,4 @@ class AuthLoginController(AuthControllerBase):
     User Login Resource
     """
     def post(self):
-        user_service = self._create_user_service()
-        return user_service.login_user(self.get_json_with_schema(login_schema))
+        return self._user_service.login_user(self.get_json_with_schema(login_schema))

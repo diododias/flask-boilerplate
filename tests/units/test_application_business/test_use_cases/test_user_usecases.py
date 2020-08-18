@@ -1,5 +1,4 @@
 import uuid
-import pytest
 import mock
 
 from datetime import datetime

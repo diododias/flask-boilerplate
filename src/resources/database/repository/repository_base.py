@@ -5,7 +5,6 @@ class RepositoryBase:
     """
     Interface to access database user model
     """
-    _db_session: db.session
 
     def __init__(self, db_session: db.session):
         self._db_session = db_session

@@ -96,4 +96,3 @@ def test_status_user(repo_mock, pass_svc_mock, token_svc_mock):
     repo_mock.filter_by_id.return_value = None
     with pytest.raises(Exception):
         service.status_user("TOKEN")
-

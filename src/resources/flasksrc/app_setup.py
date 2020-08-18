@@ -17,13 +17,13 @@ def init_app(app):
     app.config.from_object(settings_container.get(APP_ENV))
     flask_api_doc(app, config_path='./src/resources/swagger.json', url_prefix='/swagger',
                   title='Swagger from Flask Boilerplate')
-    register_blueprints(app)
     cache.init_app(app)
     bcrypt.init_app(app)
     db_init_app(app)
-    app.register_error_handler(400, error_handler)
     CORS(app, supports_credentials=True)
     healthcheck_init_app(app)
+    register_blueprints(app)
+    app.register_error_handler(500, error_handler)
 
     @app.teardown_appcontext
     def shutdown_db_session(exception=None):

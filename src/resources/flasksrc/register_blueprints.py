@@ -1,4 +1,4 @@
-from src.interface_adapters.blueprints.registereds_blueprints import blueprints_store
+from src.resources.blueprints.registereds_blueprints import blueprints_store
 
 
 def register_blueprints(app):

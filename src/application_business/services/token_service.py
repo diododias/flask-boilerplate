@@ -1,6 +1,6 @@
 import jwt
-from functools import wraps
-from flask import request, abort
+from uuid import UUID
+from flask import abort, request
 from datetime import datetime, timedelta
 from src.application_business.services.responses_service import Responses
 from src.resources.settings import settings_container, APP_ENV
@@ -46,44 +46,35 @@ class TokenService:
         except Exception as e:
             return e
 
-    def decode_auth_token(self, auth_token):
+    def get_auth_token(self):
+        auth_header = request.headers.get('Authorization', None)
+
+        if auth_header is not None and 'Bearer ' in auth_header:
+            auth_token = auth_header[7:]
+
+        else:
+            auth_token = auth_header
+
+        return auth_token if auth_token is not None else abort(Responses.invalid_entity("Invalid token"))
+
+    def decode_auth_token(self):
         """
         Validates the auth token
         :param auth_token:
         :return: integer|string
         """
+        auth_token = self.get_auth_token()
         try:
             payload = jwt.decode(auth_token, settings_container.get(APP_ENV).SECRET_KEY)
             if self.is_blacklisted(auth_token):
-                abort(Responses.invalid_entity('Token blacklisted. Please log in again.'))
+                abort(Responses.invalid_entity('Token blacklisted.'))
             else:
-                return {'user_id': payload['sub'], 'auth_token': auth_token}
-        except jwt.ExpiredSignatureError:
-            abort(Responses.invalid_entity('Signature expired. Please log in again.'))
-        except jwt.InvalidTokenError:
-            abort(Responses.invalid_entity('Invalid token. Please log in again.'))
-
-    def login_required(self, return_user_id=False):
-        def decorator(f):
-            @wraps(f)
-            def decorated_function(*args, **kwargs):
-                try:
-                    auth_header = request.headers.get('Authorization')
-                    if auth_header:
-                        auth_token = auth_header.split(" ")[1]
-                    else:
-                        auth_token = ''
-                except Exception:
-                    return abort(Responses.unauthorized(message='Invalid auth token header format.'))
-
-                if auth_token:
-                    resp = self.decode_auth_token(auth_token)
-                    """if Users.check_user_is_registered(resp):
-                        if return_user_id:
-                            return f(*args, **kwargs, user_id=resp)
-                        return f(*args, **kwargs)"""
-                    return abort(Responses.unauthorized(message=resp))
+                uuid_obj = UUID(payload.get('sub'), version=4)
+                if uuid_obj:
+                    return {'user_id': payload['sub'], 'auth_token': auth_token}
                 else:
-                    return abort(Responses.unauthorized(message='Provide a valid auth token.'))
-            return decorated_function
-        return decorator
+                    abort(Responses.invalid_entity("Invalid token"))
+        except jwt.ExpiredSignatureError:
+            abort(Responses.invalid_entity('Signature expired.'))
+        except jwt.InvalidTokenError:
+            abort(Responses.invalid_entity('Invalid token.'))

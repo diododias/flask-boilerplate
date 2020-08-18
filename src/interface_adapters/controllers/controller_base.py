@@ -1,36 +1,30 @@
 from flask import request, abort
 from flask.views import MethodView
 from src.application_business.services.responses_service import Responses
+from src.application_business.services.token_service import TokenService
+from src.resources.database.repository.invalid_token_repository import InvalidTokenRepository
 from src.resources.flasksrc.input_validator import InputValidator
 
 
 class ControllerResourceBase(MethodView):
 
-    @classmethod
-    def get_headers(cls):
+    def __init__(self, token_repository: InvalidTokenRepository):
+        self._token_service = TokenService(repository=token_repository)
+
+    def get_headers(self):
         return request.headers
 
-    @classmethod
-    def get_json(cls):
+    def get_json(self):
         return request.get_json()
 
-    @classmethod
-    def get_json_with_schema(cls, schema):
-        post_data = cls.get_json()
+    def get_json_with_schema(self, schema):
+        post_data = self.get_json()
         if not isinstance(post_data, dict):
             abort(Responses.invalid_entity('Invalid json.'))
         return InputValidator.validate_json(schema=schema, json_data=post_data)
 
-    @classmethod
-    def validate_token(cls):
-        if cls.get_headers().get('Authorization', None) is None:
-            abort(Responses.invalid_entity('Missing Authorization header.'))
-        return InputValidator.validate_token(cls.get_headers().get('Authorization'))
+    def get_token(self):
+        return self.validate_token().get('auth_token')
 
-    @classmethod
-    def get_token(cls):
-        return cls.validate_token().get('auth_token')
-
-    @classmethod
-    def get_user_id(cls):
-        return cls.validate_token().get('user_id')
+    def get_user_id(self):
+        return self._token_service.decode_auth_token().get('user_id')

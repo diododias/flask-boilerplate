@@ -24,3 +24,4 @@ def test_password_service_check_password(encript_mock):
 def test_password_service_invalid_encript_engine():
     with pytest.raises(Exception):
         password_service = PasswordService(encrypt_engine=None)
+        del password_service

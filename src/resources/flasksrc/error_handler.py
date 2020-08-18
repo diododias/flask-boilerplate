@@ -1,5 +1,6 @@
 from src.application_business.services.responses_service import Responses
+from flask import abort
 
 
 def error_handler(e):
-    return Responses.bad_request(e)
+    return abort(Responses.bad_request(e))

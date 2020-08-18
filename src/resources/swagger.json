@@ -120,15 +120,6 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Authorization",
-            "description": "JWT Token in Authorization Header",
-            "type": "string",
-            "required": true
-          }
-        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -154,7 +145,12 @@
               "$ref": "#/definitions/bad_request"
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/auth/status": {
@@ -167,14 +163,6 @@
         "operationId": "AuthStatus",
         "produces": [
           "application/json"
-        ],
-        "parameters": [
-          {
-            "in": "header",
-            "name": "Authorization",
-            "type": "string",
-            "required": true
-          }
         ],
         "responses": {
           "200": {
@@ -201,7 +189,12 @@
               "$ref": "#/definitions/bad_request"
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     }
   },
@@ -276,7 +269,6 @@
           "title": "User email",
           "description": "User email registered",
           "example": "test@test.com",
-          "required": true,
           "type": "string"
         },
         "first_name": {
@@ -297,10 +289,13 @@
           "type": "string",
           "title": "User Password",
           "description": "password used for authentication",
-          "example": "123456",
-          "required": true
+          "example": "123456"
         }
-      }
+      },
+      "required": [
+        "email",
+        "password"
+      ]
     },
     "LoginUser": {
       "type": "object",
@@ -309,7 +304,6 @@
           "title": "User email",
           "description": "User email registered",
           "example": "test@test.com",
-          "required": true,
           "type": "string"
         },
         "password": {
@@ -317,9 +311,12 @@
           "title": "User Password",
           "description": "password used for authentication",
           "example": "123456"
-        },
-        "required": true
-      }
+        }
+      },
+      "required": [
+        "email",
+        "password"
+      ]
     },
     "UserResponse": {
       "properties": {
