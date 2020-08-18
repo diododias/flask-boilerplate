@@ -3,3 +3,5 @@
 venv/*
 migrations/*
 .scannerwork/*
+.coverage
+coverage/*
