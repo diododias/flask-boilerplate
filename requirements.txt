@@ -33,3 +33,4 @@ marshmallow
 flake8
 mock
 pytest_mock
+healthcheck

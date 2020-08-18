@@ -26,7 +26,7 @@ class UserRepository(RepositoryBase):
             password=user_data.get('password'),
             first_name=user_data.get('first_name', ''),
             last_name=user_data.get('last_name', ''),
-            roles=role,
+            roles=[role],
             is_superuser=user_data.get('is_superuser', False)
         )
         return self._insert_row(user)

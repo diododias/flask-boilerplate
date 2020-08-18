@@ -8,6 +8,8 @@ from src.resources.database import init_app as db_init_app
 from src.resources.settings import settings_container, APP_ENV
 from src.resources.flasksrc.register_blueprints import register_blueprints
 from src.resources.database.repository.populate_initial_data import PopulateInitialData
+from src.resources.flasksrc.error_handler import error_handler
+from src.resources.resources_healthcheck.resources_healthcheck import init_app as healthcheck_init_app
 
 
 def init_app(app):
@@ -19,7 +21,9 @@ def init_app(app):
     cache.init_app(app)
     bcrypt.init_app(app)
     db_init_app(app)
+    app.register_error_handler(400, error_handler)
     CORS(app, supports_credentials=True)
+    healthcheck_init_app(app)
 
     @app.teardown_appcontext
     def shutdown_db_session(exception=None):
