@@ -1,4 +1,4 @@
-from src.resources.database.repository.repository_base import RepositoryBase
+from src.frameworks_and_drivers.database.repository.repository_base import RepositoryBase
 
 
 class UsecaseBase:

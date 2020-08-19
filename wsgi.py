@@ -1,7 +1,7 @@
 import os
 
 from src.main import create_app
-from src.resources.settings import settings_container, APP_ENV
+from src.frameworks_and_drivers.settings import settings_container, APP_ENV
 
 
 if __name__ == "__main__":

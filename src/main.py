@@ -2,8 +2,8 @@ import os
 import logging
 
 from flask import Flask
-from src.resources.flasksrc.app_setup import init_app
-from src.resources.settings import settings_container, APP_ENV
+from src.frameworks_and_drivers.flasksrc.app_setup import init_app
+from src.frameworks_and_drivers.settings import settings_container, APP_ENV
 
 logging.basicConfig(level=logging.DEBUG,
                     format='[%(asctime)s]: {} %(levelname)s %(message)s'.format(os.getpid()),

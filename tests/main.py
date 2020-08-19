@@ -5,7 +5,7 @@ myPath = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, myPath + '/../')
 
 from src.main import create_app
-from src.resources.settings import settings_container, APP_ENV
+from src.frameworks_and_drivers.settings import settings_container, APP_ENV
 
 app = create_app()
 

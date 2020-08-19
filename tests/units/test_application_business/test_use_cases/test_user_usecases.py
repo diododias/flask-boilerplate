@@ -3,8 +3,8 @@ import mock
 
 from datetime import datetime
 from unittest.mock import patch
-from src.resources.database import db
-from src.entities.user_entity import UserEntity
+from src.frameworks_and_drivers.database import db
+from src.enterprise_business.entities.user_entity import UserEntity
 from src.application_business.use_cases.user_usecases import UserUseCase
 
 
@@ -36,7 +36,7 @@ def mock_user_model():
     return mock_model
 
 
-@patch('src.resources.database.repository.user_repository.UserRepository')
+@patch('src.frameworks_and_drivers.database.repository.user_repository.UserRepository')
 def test_user_usecase_creation(mock_repo):
     mock_repo.create_user.return_value = mock_user_entity()
     post_data = {
@@ -51,7 +51,7 @@ def test_user_usecase_creation(mock_repo):
     assert user.password == ""
 
 
-@patch('src.resources.database.repository.user_repository.UserRepository')
+@patch('src.frameworks_and_drivers.database.repository.user_repository.UserRepository')
 def test_user_usecase_find_user_by_email(mock_repo):
     mock_repo.filter_by_email.return_value = mock_user_model()
     user_use_case = UserUseCase(repository=mock_repo)
@@ -63,7 +63,7 @@ def test_user_usecase_find_user_by_email(mock_repo):
     assert mock_repo.called_with('test@test.com')
 
 
-@patch('src.resources.database.repository.user_repository.UserRepository')
+@patch('src.frameworks_and_drivers.database.repository.user_repository.UserRepository')
 def test_user_usecase_find_user_by_id(mock_repo):
     mock_repo.filter_by_id.return_value = mock_user_model()
     user_use_case = UserUseCase(repository=mock_repo)
@@ -77,7 +77,7 @@ def test_user_usecase_find_user_by_id(mock_repo):
     mock_repo.filter_by_id.assert_called_with(value=user_id)
 
 
-@patch('src.resources.database.repository.user_repository.UserRepository')
+@patch('src.frameworks_and_drivers.database.repository.user_repository.UserRepository')
 def test_user_usecase_create_user_entity_invalid_input(mock_repo):
     mock_repo.filter_by_id.return_value = True
     user_use_case = UserUseCase(repository=mock_repo)

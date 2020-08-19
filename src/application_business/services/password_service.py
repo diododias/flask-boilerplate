@@ -1,4 +1,4 @@
-from src.resources.security import bcrypt
+from src.frameworks_and_drivers.security import bcrypt
 
 
 class PasswordService:

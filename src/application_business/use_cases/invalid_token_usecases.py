@@ -1,5 +1,5 @@
-from src.resources.database import db
-from src.entities.token_entity import TokenEntity
+from src.frameworks_and_drivers.database import db
+from src.enterprise_business.entities.token_entity import TokenEntity
 from src.application_business.use_cases.usecase_base import UsecaseBase
 
 

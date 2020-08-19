@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from src.entities.user_entity import UserEntity
+from src.enterprise_business.entities.user_entity import UserEntity
 
 
 def test_user_entity_creation_and_values():

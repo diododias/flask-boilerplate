@@ -3,8 +3,8 @@ from uuid import UUID
 from flask import abort, request
 from datetime import datetime, timedelta
 from src.application_business.services.responses_service import Responses
-from src.resources.settings import settings_container, APP_ENV
-from src.resources.database.repository.invalid_token_repository import InvalidTokenRepository
+from src.frameworks_and_drivers.settings import settings_container, APP_ENV
+from src.frameworks_and_drivers.database.repository.invalid_token_repository import InvalidTokenRepository
 from src.application_business.use_cases.invalid_token_usecases import InvalidTokenUsecase
 
 
@@ -66,14 +66,12 @@ class TokenService:
         auth_token = self.get_auth_token()
         try:
             payload = jwt.decode(auth_token, settings_container.get(APP_ENV).SECRET_KEY)
-            if self.is_blacklisted(auth_token):
-                abort(Responses.invalid_entity('Token blacklisted.'))
-            else:
+            if self.is_blacklisted(auth_token) is False:
                 uuid_obj = UUID(payload.get('sub'), version=4)
                 if uuid_obj:
                     return {'user_id': payload['sub'], 'auth_token': auth_token}
-                else:
-                    abort(Responses.invalid_entity("Invalid token"))
+
+            abort(Responses.invalid_entity("Invalid token"))
         except jwt.ExpiredSignatureError:
             abort(Responses.invalid_entity('Signature expired.'))
         except jwt.InvalidTokenError:

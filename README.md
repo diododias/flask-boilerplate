@@ -1,5 +1,6 @@
 # flask-boilerplate
 
+- marshmallow
 - python3.7
 - postgres
 - sqlalchemy

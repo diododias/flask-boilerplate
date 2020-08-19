@@ -2,8 +2,8 @@ from flask import request, abort
 from flask.views import MethodView
 from src.application_business.services.responses_service import Responses
 from src.application_business.services.token_service import TokenService
-from src.resources.database.repository.invalid_token_repository import InvalidTokenRepository
-from src.resources.flasksrc.input_validator import InputValidator
+from src.frameworks_and_drivers.database.repository.invalid_token_repository import InvalidTokenRepository
+from src.frameworks_and_drivers.flasksrc.input_validator import InputValidator
 
 
 class ControllerResourceBase(MethodView):
@@ -24,7 +24,7 @@ class ControllerResourceBase(MethodView):
         return InputValidator.validate_json(schema=schema, json_data=post_data)
 
     def get_token(self):
-        return self.validate_token().get('auth_token')
+        return self._token_service.decode_auth_token().get('auth_token')
 
     def get_user_id(self):
         return self._token_service.decode_auth_token().get('user_id')

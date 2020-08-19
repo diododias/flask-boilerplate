@@ -10,7 +10,7 @@ from mock import patch
 from src.application_business.services.password_service import PasswordService
 
 
-@patch('src.resources.security.bcrypt')
+@patch('src.frameworks_and_drivers.security.bcrypt')
 def test_password_service_check_password(encript_mock):
     password_service = PasswordService(encrypt_engine=encript_mock)
 

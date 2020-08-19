@@ -1,7 +1,7 @@
 from datetime import datetime
 from src.interface_adapters.controllers.controller_base import ControllerResourceBase
 from src.application_business.services.responses_service import Responses
-from src.resources.security import Security
+from src.frameworks_and_drivers.security import Security
 
 
 class IndexController(ControllerResourceBase):

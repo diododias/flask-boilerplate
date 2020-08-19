@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from src.entities.token_entity import TokenEntity
+from src.enterprise_business.entities.token_entity import TokenEntity
 
 
 def test_token_entity_creation_and_values():

@@ -4,8 +4,8 @@ import mock
 from mock import patch
 from datetime import datetime
 from src.application_business.use_cases.invalid_token_usecases import InvalidTokenUsecase
-from src.resources.database import db
-from src.entities.token_entity import TokenEntity
+from src.frameworks_and_drivers.database import db
+from src.enterprise_business.entities.token_entity import TokenEntity
 
 
 def mock_invalid_token_model():
@@ -17,7 +17,7 @@ def mock_invalid_token_model():
     return mock_model
 
 
-@patch('src.resources.database.repository.invalid_token_repository.InvalidTokenRepository')
+@patch('src.frameworks_and_drivers.database.repository.invalid_token_repository.InvalidTokenRepository')
 def test_invalid_token_usercase_find_token(mock_repo):
     invalid_token_usecase = InvalidTokenUsecase(repository=mock_repo)
     token = invalid_token_usecase.find_token("TOKEN")
@@ -30,7 +30,7 @@ def test_invalid_token_usercase_find_token(mock_repo):
     assert isinstance(token, TokenEntity)
 
 
-@patch('src.resources.database.repository.invalid_token_repository.InvalidTokenRepository')
+@patch('src.frameworks_and_drivers.database.repository.invalid_token_repository.InvalidTokenRepository')
 def test_invalid_token_usercase_invalidate_token(mock_repo):
     invalid_token_usecase = InvalidTokenUsecase(repository=mock_repo)
     token = invalid_token_usecase.invalidate_token("TOKEN")

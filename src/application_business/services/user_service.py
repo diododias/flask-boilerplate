@@ -1,7 +1,7 @@
 from flask import abort
 from src.application_business.services.token_service import TokenService
 from src.application_business.services.responses_service import Responses
-from src.resources.database.repository.user_repository import UserRepository
+from src.frameworks_and_drivers.database.repository.user_repository import UserRepository
 from src.application_business.services.password_service import PasswordService
 from src.application_business.use_cases.user_usecases import UserUseCase
 

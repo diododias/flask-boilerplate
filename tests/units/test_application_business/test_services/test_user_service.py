@@ -9,7 +9,7 @@ from mock import patch
 from src.application_business.services.user_service import UserService
 
 
-@patch('src.resources.database.repository.user_repository.UserRepository')
+@patch('src.frameworks_and_drivers.database.repository.user_repository.UserRepository')
 @patch('src.application_business.services.password_service.PasswordService')
 @patch('src.application_business.services.token_service.TokenService')
 def test_register_user(repo_mock, pass_svc_mock, token_svc_mock):
@@ -37,7 +37,7 @@ def test_register_user(repo_mock, pass_svc_mock, token_svc_mock):
     assert response.status_code == 400
 
 
-@patch('src.resources.database.repository.user_repository.UserRepository')
+@patch('src.frameworks_and_drivers.database.repository.user_repository.UserRepository')
 @patch('src.application_business.services.password_service.PasswordService')
 @patch('src.application_business.services.token_service.TokenService')
 def test_login_user(repo_mock, pass_svc_mock, token_svc_mock):
@@ -63,7 +63,7 @@ def test_login_user(repo_mock, pass_svc_mock, token_svc_mock):
     assert response.status_code == 404
 
 
-@patch('src.resources.database.repository.user_repository.UserRepository')
+@patch('src.frameworks_and_drivers.database.repository.user_repository.UserRepository')
 @patch('src.application_business.services.password_service.PasswordService')
 @patch('src.application_business.services.token_service.TokenService')
 def test_logout_user(repo_mock, pass_svc_mock, token_svc_mock):
@@ -72,7 +72,7 @@ def test_logout_user(repo_mock, pass_svc_mock, token_svc_mock):
     assert response is not None
 
 
-@patch('src.resources.database.repository.user_repository.UserRepository')
+@patch('src.frameworks_and_drivers.database.repository.user_repository.UserRepository')
 @patch('src.application_business.services.password_service.PasswordService')
 @patch('src.application_business.services.token_service.TokenService')
 def test_status_user(repo_mock, pass_svc_mock, token_svc_mock):

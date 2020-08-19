@@ -1,5 +1,5 @@
 from src.interface_adapters.controllers.auth.auth_controller_base import AuthControllerBase
-from src.resources.security import Security
+from src.frameworks_and_drivers.security import Security
 
 
 class AuthUserStatusController(AuthControllerBase):
