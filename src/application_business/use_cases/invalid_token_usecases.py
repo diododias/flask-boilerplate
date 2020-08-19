@@ -1,9 +1,13 @@
 from src.frameworks_and_drivers.database import db
 from src.enterprise_business.entities.token_entity import TokenEntity
-from src.application_business.use_cases.usecase_base import UsecaseBase
+from src.application_business.interfaces.invalid_token_repository import InvalidTokenRepositoryInterface
 
 
-class InvalidTokenUsecase(UsecaseBase):
+class InvalidTokenUsecase:
+
+    def __init__(self, repository: InvalidTokenRepositoryInterface):
+        self.repository = repository
+
     @staticmethod
     def _create_token(cursor: db.Model):
         if not isinstance(cursor, type(db.Model)):

@@ -1,6 +1,6 @@
 from src.frameworks_and_drivers.database import db
 from src.frameworks_and_drivers.database.models.roles_model import Role
-from src.frameworks_and_drivers.database.repository.repository_base import RepositoryBase
+from src.frameworks_and_drivers.database.repository.base_repository import RepositoryBase
 
 
 class RoleRepository(RepositoryBase):

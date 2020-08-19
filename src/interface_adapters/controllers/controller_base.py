@@ -2,14 +2,13 @@ from flask import request, abort
 from flask.views import MethodView
 from src.application_business.services.responses_service import Responses
 from src.application_business.services.token_service import TokenService
-from src.frameworks_and_drivers.database.repository.invalid_token_repository import InvalidTokenRepository
 from src.frameworks_and_drivers.flasksrc.input_validator import InputValidator
 
 
 class ControllerResourceBase(MethodView):
 
-    def __init__(self, token_repository: InvalidTokenRepository):
-        self._token_service = TokenService(repository=token_repository)
+    def __init__(self, token_service: TokenService):
+        self._token_service = token_service
 
     def get_headers(self):
         return request.headers

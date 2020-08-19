@@ -3,7 +3,7 @@ from src.frameworks_and_drivers.database.models.users_model import User
 from src.frameworks_and_drivers.database.models.roles_model import Role
 from src.frameworks_and_drivers.database.repository.user_repository import UserRepository
 from src.frameworks_and_drivers.database.repository.role_repository import RoleRepository
-from src.frameworks_and_drivers.database.repository.repository_base import RepositoryBase
+from src.frameworks_and_drivers.database.repository.base_repository import RepositoryBase
 from src.frameworks_and_drivers.settings import settings_container, APP_ENV
 
 

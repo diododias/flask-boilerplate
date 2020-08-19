@@ -1,10 +1,11 @@
 from src.frameworks_and_drivers.database import db
 from src.frameworks_and_drivers.database.models.users_model import User
-from src.frameworks_and_drivers.database.repository.repository_base import RepositoryBase
+from src.frameworks_and_drivers.database.repository.base_repository import RepositoryBase
 from src.frameworks_and_drivers.database.repository.role_repository import RoleRepository
+from src.application_business.interfaces.user_repository import UserRepositoryInterface
 
 
-class UserRepository(RepositoryBase):
+class UserRepository(RepositoryBase, UserRepositoryInterface):
     """
     Interface to access database user model
     """
@@ -13,7 +14,7 @@ class UserRepository(RepositoryBase):
         self._user_model = User
         self._role_repository = RoleRepository(db_session)
 
-    def create_user(self, user_data: dict):
+    def create_user(self, user_data: dict) -> db.Model:
         """
         Create user model and insert in DB
         when create user, default role is assigment to user

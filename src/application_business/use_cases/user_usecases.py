@@ -1,10 +1,13 @@
 from sqlalchemy.dialects.postgresql import UUID
 from src.frameworks_and_drivers.database import db
 from src.enterprise_business.entities.user_entity import UserEntity
-from src.application_business.use_cases.usecase_base import UsecaseBase
+from src.application_business.interfaces.user_repository import UserRepositoryInterface
 
 
-class UserUseCase(UsecaseBase):
+class UserUseCase:
+
+    def __init__(self, repository: UserRepositoryInterface):
+        self.repository = repository
 
     @staticmethod
     def _create_user_entity(cursor: db.Model):

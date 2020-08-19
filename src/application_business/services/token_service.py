@@ -3,15 +3,16 @@ from uuid import UUID
 from flask import abort, request
 from datetime import datetime, timedelta
 from src.application_business.services.responses_service import Responses
-from src.frameworks_and_drivers.settings import settings_container, APP_ENV
-from src.frameworks_and_drivers.database.repository.invalid_token_repository import InvalidTokenRepository
+from src.application_business.interfaces.invalid_token_repository import InvalidTokenRepositoryInterface
 from src.application_business.use_cases.invalid_token_usecases import InvalidTokenUsecase
 
 
 class TokenService:
 
-    def __init__(self, repository: InvalidTokenRepository):
+    def __init__(self, repository: InvalidTokenRepositoryInterface, secret: str, request: request):
         self._blacklist_token_usecase = InvalidTokenUsecase(repository=repository)
+        self._secret = secret
+        self._request = request
 
     def is_blacklisted(self, auth_token):
         if self._blacklist_token_usecase.find_token(auth_token):
@@ -25,8 +26,7 @@ class TokenService:
             return result
         return self._blacklist_token_usecase.invalidate_token(auth_token)
 
-    @staticmethod
-    def encode_auth_token(user_id):
+    def encode_auth_token(self, user_id):
         """
         Generates the Auth Token
         param: user_id
@@ -40,14 +40,14 @@ class TokenService:
             }
             return jwt.encode(
                 payload=payload,
-                key=settings_container.get(APP_ENV).SECRET_KEY,
+                key=self._secret,
                 algorithm='HS256'
             ).decode()
         except Exception as e:
             return e
 
     def get_auth_token(self):
-        auth_header = request.headers.get('Authorization', None)
+        auth_header = self._request.headers.get('Authorization', None)
 
         if auth_header is not None and 'Bearer ' in auth_header:
             auth_token = auth_header[7:]
@@ -65,7 +65,7 @@ class TokenService:
         """
         auth_token = self.get_auth_token()
         try:
-            payload = jwt.decode(auth_token, settings_container.get(APP_ENV).SECRET_KEY)
+            payload = jwt.decode(auth_token, self._secret)
             if self.is_blacklisted(auth_token) is False:
                 uuid_obj = UUID(payload.get('sub'), version=4)
                 if uuid_obj:

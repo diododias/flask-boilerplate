@@ -1,7 +1,8 @@
 from src.frameworks_and_drivers.database import db
+from src.application_business.interfaces.base_repository import BaseRepositoryInterface
 
 
-class RepositoryBase:
+class RepositoryBase(BaseRepositoryInterface):
     """
     Interface to access database user model
     """
@@ -9,7 +10,7 @@ class RepositoryBase:
     def __init__(self, db_session: db.session):
         self._db_session = db_session
 
-    def _insert_row(self, entity: db.Model):
+    def _insert_row(self, entity: db.Model) -> db.Model:
         self._db_session.add(entity)
         self._db_session.commit()
         self._db_session.refresh(entity)
