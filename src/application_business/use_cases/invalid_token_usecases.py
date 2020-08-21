@@ -1,11 +1,11 @@
 from src.frameworks_and_drivers.database import db
 from src.enterprise_business.entities.token_entity import TokenEntity
-from src.application_business.interfaces.invalid_token_repository import InvalidTokenRepositoryInterface
+from src.application_business.interfaces.invalid_token_repository import IInvalidTokenRepository
 
 
-class InvalidTokenUsecase:
+class InvalidTokenUseCase:
 
-    def __init__(self, repository: InvalidTokenRepositoryInterface):
+    def __init__(self, repository: IInvalidTokenRepository):
         self.repository = repository
 
     @staticmethod

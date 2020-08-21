@@ -1,4 +1,4 @@
-from flask import request, abort
+from flask import abort, request
 from flask.views import MethodView
 from src.application_business.services.responses_service import Responses
 from src.application_business.services.token_service import TokenService
@@ -7,14 +7,15 @@ from src.frameworks_and_drivers.flasksrc.input_validator import InputValidator
 
 class ControllerResourceBase(MethodView):
 
-    def __init__(self, token_service: TokenService):
+    def __init__(self, token_service: TokenService, flask_request: request):
         self._token_service = token_service
+        self._request = flask_request
 
     def get_headers(self):
-        return request.headers
+        return self._request.headers
 
     def get_json(self):
-        return request.get_json()
+        return self._request.get_json()
 
     def get_json_with_schema(self, schema):
         post_data = self.get_json()

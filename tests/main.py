@@ -7,6 +7,9 @@ sys.path.insert(0, myPath + '/../')
 from src.main import create_app
 from src.frameworks_and_drivers.settings import settings_container, APP_ENV
 
+
+os.environ['APP_ENV'] = "test"
+
 app = create_app()
 
 if __name__ == "__main__":

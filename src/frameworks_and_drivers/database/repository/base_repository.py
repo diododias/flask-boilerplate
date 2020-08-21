@@ -1,8 +1,8 @@
 from src.frameworks_and_drivers.database import db
-from src.application_business.interfaces.base_repository import BaseRepositoryInterface
+from src.application_business.interfaces.base_repository import IBaseRepository
 
 
-class RepositoryBase(BaseRepositoryInterface):
+class RepositoryBase(IBaseRepository):
     """
     Interface to access database user model
     """

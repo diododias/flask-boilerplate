@@ -1,37 +1,45 @@
 from flask import abort
 from src.application_business.services.token_service import TokenService
 from src.application_business.services.responses_service import Responses
-from src.application_business.interfaces.user_repository import UserRepositoryInterface
 from src.application_business.services.password_service import PasswordService
-from src.application_business.use_cases.user_usecases import UserUseCase
+from src.application_business.interfaces.filter_user_by_email_usecase import IFilterUserByEmailUseCase
+from src.application_business.interfaces.filter_user_by_id_usecase import IFilterUserByIdUseCase
+from src.application_business.interfaces.create_user_entity_usecase import ICreateUserEntityUseCase
+from src.application_business.interfaces.create_user_usecase import ICreateUserUseCase
 
 
 class UserService:
     """
     Services about all user interation
     """
-    def __init__(self, user_usecase: UserUseCase, token_service: TokenService, password_service: PasswordService):
+    def __init__(self, token_service: TokenService,
+                 password_service: PasswordService,
+                 filter_user_by_id_usecase: IFilterUserByIdUseCase,
+                 filter_user_by_email_usecase: IFilterUserByEmailUseCase,
+                 create_user_entity_usecase: ICreateUserEntityUseCase,
+                 create_user_usecase: ICreateUserUseCase
+                 ):
         self._password_service = password_service
         self._token_service = token_service
-        self._user_usecase = user_usecase
+        self._filter_id = filter_user_by_id_usecase
+        self._filter_email = filter_user_by_email_usecase
+        self._create_entity = create_user_entity_usecase
+        self._create_user = create_user_usecase
 
     def register_user(self, post_data: dict) -> Responses.response_base:
-        user = self._user_usecase.find_user_by_email(post_data.get('email'))
+        user = self._filter_email.execute(post_data.get('email'))
         if not user:
-            try:
-                user = self._user_usecase.create_user(post_data)
-                response_object = {
-                    'auth_token': self._token_service.encode_auth_token(user.id)
-                }
-                return Responses.created(response_object)
-            except Exception as e:
-                print(e)
-                return Responses.bad_request(str(e))
+            user = self._create_entity.execute(self._create_user.execute(post_data))
+
+            response_object = {
+                'auth_token': self._token_service.encode_auth_token(user.id)
+            }
+            return Responses.created(response_object)
         else:
             return Responses.accepted(message="User already exists.")
 
     def login_user(self, post_data: dict) -> Responses.response_base():
-        user = self._user_usecase.find_user_by_email(post_data.get('email'))
+        user = self._create_entity.execute(self._filter_email.execute(post_data.get('email')))
         if user:
             if self._password_service.check_password(user.password, post_data.get('password')):
                 auth_token = self._token_service.encode_auth_token(user.id)
@@ -45,11 +53,13 @@ class UserService:
             return Responses.not_found('User not found.')
 
     def logout_user(self, auth_token: str) -> Responses.response_base():
-        self._token_service.include_token_blacklist(auth_token)
-        return Responses.ok(message='Successfully logged out.')
+        if self._token_service.include_token_blacklist(auth_token):
+            return Responses.ok(message='Successfully logged out.')
+        else:
+            return Responses.bad_request(message="Token not blacklisted")
 
     def status_user(self, user_id: str) -> Responses.response_base():
-        user = self._user_usecase.find_user_by_id(user_id)
+        user = self._create_entity.execute(self._filter_id.execute(user_id))
         if user is None:
             abort(Responses.invalid_entity("Invalid token"))
         response_object = {

@@ -3,7 +3,7 @@ import mock
 
 from mock import patch
 from datetime import datetime
-from src.application_business.use_cases.invalid_token_usecases import InvalidTokenUsecase
+from src.application_business.use_cases.invalid_token_usecases import InvalidTokenUseCase
 from src.frameworks_and_drivers.database import db
 from src.enterprise_business.entities.token_entity import TokenEntity
 
@@ -19,7 +19,7 @@ def mock_invalid_token_model():
 
 @patch('src.frameworks_and_drivers.database.repository.invalid_token_repository.InvalidTokenRepository')
 def test_invalid_token_usercase_find_token(mock_repo):
-    invalid_token_usecase = InvalidTokenUsecase(repository=mock_repo)
+    invalid_token_usecase = InvalidTokenUseCase(repository=mock_repo)
     token = invalid_token_usecase.find_token("TOKEN")
     assert token is not None
     mock_repo.filter_by_token.assert_called_once()
@@ -32,7 +32,7 @@ def test_invalid_token_usercase_find_token(mock_repo):
 
 @patch('src.frameworks_and_drivers.database.repository.invalid_token_repository.InvalidTokenRepository')
 def test_invalid_token_usercase_invalidate_token(mock_repo):
-    invalid_token_usecase = InvalidTokenUsecase(repository=mock_repo)
+    invalid_token_usecase = InvalidTokenUseCase(repository=mock_repo)
     token = invalid_token_usecase.invalidate_token("TOKEN")
     assert token is not None
     mock_repo.invalidate_token.assert_called_once()

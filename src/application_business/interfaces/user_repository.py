@@ -1,9 +1,9 @@
 from abc import abstractmethod
 from src.frameworks_and_drivers.database import db
-from src.application_business.interfaces.base_repository import BaseRepositoryInterface
+from src.application_business.interfaces.base_repository import IBaseRepository
 
 
-class UserRepositoryInterface(BaseRepositoryInterface):
+class IUserRepository(IBaseRepository):
     @abstractmethod
     def create_user(self, user_data: dict) -> db.Model:
         raise NotImplementedError
@@ -15,5 +15,3 @@ class UserRepositoryInterface(BaseRepositoryInterface):
     @abstractmethod
     def filter_by_id(self, value: str):
         raise NotImplementedError
-
-

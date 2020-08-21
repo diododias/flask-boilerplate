@@ -1,30 +1,38 @@
 import jwt
 from uuid import UUID
-from flask import abort, request
+from flask import abort
 from datetime import datetime, timedelta
 from src.application_business.services.responses_service import Responses
-from src.application_business.interfaces.invalid_token_repository import InvalidTokenRepositoryInterface
-from src.application_business.use_cases.invalid_token_usecases import InvalidTokenUsecase
+from src.application_business.interfaces.create_token_entity_usecase import ICreateTokenEntityUseCase
+from src.application_business.interfaces.filter_token_by_token_usecase import IFilterTokenByTokenUseCase
+from src.application_business.interfaces.invalidate_token_usecase import IInvalidateTokenUseCase
+from src.application_business.interfaces.get_auth_token_usecase import IGetAuthTokenUseCase
 
 
 class TokenService:
 
-    def __init__(self, repository: InvalidTokenRepositoryInterface, secret: str, request: request):
-        self._blacklist_token_usecase = InvalidTokenUsecase(repository=repository)
+    def __init__(self, create_token_entity_usecase: ICreateTokenEntityUseCase,
+                 filter_token_by_token_usecase: IFilterTokenByTokenUseCase,
+                 invalidate_token_usecase: IInvalidateTokenUseCase,
+                 get_auth_token: IGetAuthTokenUseCase,
+                 secret: str):
         self._secret = secret
-        self._request = request
+        self._filter_token = filter_token_by_token_usecase
+        self._create_entity = create_token_entity_usecase
+        self._invalidate_token = invalidate_token_usecase
+        self._get_auth_token = get_auth_token
 
     def is_blacklisted(self, auth_token):
-        if self._blacklist_token_usecase.find_token(auth_token):
+        if self._filter_token.execute(auth_token):
             return True
         else:
             return False
 
     def include_token_blacklist(self, auth_token):
-        result = self._blacklist_token_usecase.find_token(auth_token)
+        result = self._create_entity.execute(self._filter_token.execute(auth_token))
         if result:
             return result
-        return self._blacklist_token_usecase.invalidate_token(auth_token)
+        return self._invalidate_token.execute(auth_token)
 
     def encode_auth_token(self, user_id):
         """
@@ -46,27 +54,16 @@ class TokenService:
         except Exception as e:
             return e
 
-    def get_auth_token(self):
-        auth_header = self._request.headers.get('Authorization', None)
-
-        if auth_header is not None and 'Bearer ' in auth_header:
-            auth_token = auth_header[7:]
-
-        else:
-            auth_token = auth_header
-
-        return auth_token if auth_token is not None else abort(Responses.invalid_entity("Invalid token"))
-
     def decode_auth_token(self):
         """
         Validates the auth token
         :param auth_token:
         :return: integer|string
         """
-        auth_token = self.get_auth_token()
+        auth_token = self._get_auth_token.execute()
         try:
             payload = jwt.decode(auth_token, self._secret)
-            if self.is_blacklisted(auth_token) is False:
+            if not self.is_blacklisted(auth_token):
                 uuid_obj = UUID(payload.get('sub'), version=4)
                 if uuid_obj:
                     return {'user_id': payload['sub'], 'auth_token': auth_token}

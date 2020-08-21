@@ -1,10 +1,10 @@
 from src.frameworks_and_drivers.database import db
 from src.frameworks_and_drivers.database.repository.base_repository import RepositoryBase
 from src.frameworks_and_drivers.database.models.invalid_tokens_model import InvalidToken
-from src.application_business.interfaces.invalid_token_repository import InvalidTokenRepositoryInterface
+from src.application_business.interfaces.invalid_token_repository import IInvalidTokenRepository
 
 
-class InvalidTokenRepository(RepositoryBase, InvalidTokenRepositoryInterface):
+class InvalidTokenRepository(RepositoryBase, IInvalidTokenRepository):
     """
     Interface to access database user model
     """

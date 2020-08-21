@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-class InvalidTokenRepositoryInterface(metaclass=ABCMeta):
+class IInvalidTokenRepository(metaclass=ABCMeta):
     @abstractmethod
     def invalidate_token(self, auth_token: str):
         raise NotImplementedError

@@ -2,7 +2,8 @@ from abc import ABCMeta, abstractmethod
 from src.frameworks_and_drivers.database import db
 
 
-class IBaseRepository(metaclass=ABCMeta):
+class ICreateUserEntityUseCase(metaclass=ABCMeta):
+    @staticmethod
     @abstractmethod
-    def _insert_row(self, entity: db.Model) -> db.Model:
+    def execute(cursor: db.Model):
         raise NotImplementedError

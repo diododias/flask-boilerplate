@@ -1,12 +1,12 @@
 from sqlalchemy.dialects.postgresql import UUID
 from src.frameworks_and_drivers.database import db
 from src.enterprise_business.entities.user_entity import UserEntity
-from src.application_business.interfaces.user_repository import UserRepositoryInterface
+from src.application_business.interfaces.user_repository import IUserRepository
 
 
 class UserUseCase:
 
-    def __init__(self, repository: UserRepositoryInterface):
+    def __init__(self, repository: IUserRepository):
         self.repository = repository
 
     @staticmethod

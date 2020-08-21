@@ -2,10 +2,10 @@ from src.frameworks_and_drivers.database import db
 from src.frameworks_and_drivers.database.models.users_model import User
 from src.frameworks_and_drivers.database.repository.base_repository import RepositoryBase
 from src.frameworks_and_drivers.database.repository.role_repository import RoleRepository
-from src.application_business.interfaces.user_repository import UserRepositoryInterface
+from src.application_business.interfaces.user_repository import IUserRepository
 
 
-class UserRepository(RepositoryBase, UserRepositoryInterface):
+class UserRepository(RepositoryBase, IUserRepository):
     """
     Interface to access database user model
     """
