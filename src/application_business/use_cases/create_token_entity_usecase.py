@@ -6,6 +6,11 @@ from src.application_business.interfaces.create_token_entity_usecase import ICre
 class CreateTokenEntityUseCase(ICreateTokenEntityUseCase):
     @staticmethod
     def execute(cursor: db.Model):
+        """
+        Convert token model returned from db in a invalid token entity, if cursor is not a db Model
+        :param cursor: data returned by database
+        :return:
+        """
         if not isinstance(cursor, type(db.Model)):
             return cursor
         return TokenEntity(
