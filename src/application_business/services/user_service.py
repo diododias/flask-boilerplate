@@ -1,6 +1,6 @@
 from flask import abort
 from src.application_business.services.token_service import TokenService
-from src.application_business.services.responses_service import Responses
+from src.application_business.services.responses_service import Responses, Response
 from src.application_business.services.password_service import PasswordService
 from src.application_business.interfaces.filter_user_by_email_usecase import IFilterUserByEmailUseCase
 from src.application_business.interfaces.filter_user_by_id_usecase import IFilterUserByIdUseCase
@@ -12,6 +12,11 @@ class UserService:
     """
     Services about all user interation
     """
+    _create_user: ICreateUserUseCase
+    _create_entity: ICreateUserEntityUseCase
+    _filter_email: IFilterUserByEmailUseCase
+    _filter_id: IFilterUserByIdUseCase
+
     def __init__(self, token_service: TokenService,
                  password_service: PasswordService,
                  filter_user_by_id_usecase: IFilterUserByIdUseCase,
@@ -26,7 +31,12 @@ class UserService:
         self._create_entity = create_user_entity_usecase
         self._create_user = create_user_usecase
 
-    def register_user(self, post_data: dict) -> Responses.response_base:
+    def register_user(self, post_data: dict) -> Response:
+        """
+        Register user if there's not have registered
+        :param post_data: a dict with post data, containing user information to registration
+        :return: Response object
+        """
         user = self._filter_email.execute(post_data.get('email'))
         if not user:
             user = self._create_entity.execute(self._create_user.execute(post_data))
@@ -38,7 +48,12 @@ class UserService:
         else:
             return Responses.accepted(message="User already exists.")
 
-    def login_user(self, post_data: dict) -> Responses.response_base():
+    def login_user(self, post_data: dict) -> Response:
+        """
+        Authenticate user to login on system
+        :param post_data: a dict with post data, containing user information to registration
+        :return: Response object
+        """
         user = self._create_entity.execute(self._filter_email.execute(post_data.get('email')))
         if user:
             if self._password_service.check_password(user.password, post_data.get('password')):
@@ -52,13 +67,23 @@ class UserService:
         else:
             return Responses.not_found('User not found.')
 
-    def logout_user(self, auth_token: str) -> Responses.response_base():
+    def logout_user(self, auth_token: str) -> Response:
+        """
+        Logout User blacklisting JWT Token
+        :param post_data: a dict with post data, containing user information to registration
+        :return: Response object
+        """
         if self._token_service.include_token_blacklist(auth_token):
             return Responses.ok(message='Successfully logged out.')
         else:
             return Responses.bad_request(message="Token not blacklisted")
 
-    def status_user(self, user_id: str) -> Responses.response_base():
+    def status_user(self, user_id: str) -> Response:
+        """
+        Check user information, useful to validate if user is authenticated on the system
+        :param user_id: User ID
+        :return: Response object
+        """
         user = self._create_entity.execute(self._filter_id.execute(user_id))
         if user is None:
             abort(Responses.invalid_entity("Invalid token"))

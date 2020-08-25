@@ -8,6 +8,10 @@ class GetAuthTokenUseCase(IGetAuthTokenUseCase):
         self._request = request
 
     def execute(self):
+        """
+        Get Authorization header
+        :return: JWT Token without 'Bearer ' phrase
+        """
         auth_header = self._request.headers.get('Authorization', None)
         if auth_header is not None and 'Bearer ' in auth_header:
             auth_token = auth_header[7:]

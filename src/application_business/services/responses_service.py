@@ -4,9 +4,9 @@ from flask import Response
 
 class Responses:
     @staticmethod
-    def response_base(data=list(),
+    def response_base(data=None,
                       status_code: int = 200,
-                      message=list(),
+                      message=None,
                       status_message: str = "success") -> Response:
         """
             Response base return request status code
@@ -25,7 +25,7 @@ class Responses:
             status=status_code)
 
     @staticmethod
-    def ok(data=list(), message=list()) -> Response:
+    def ok(data="", message="") -> Response:
         """
         Response ok return status code 200
         :param data: json data returned to api consumer
@@ -36,26 +36,26 @@ class Responses:
         return Responses.response_base(data=data, message=message, status_code=200)
 
     @staticmethod
-    def created(response_value=list()) -> Response:
+    def created(response_value) -> Response:
         """
-        Response ok return status code 200
-        :param response_value: json data returned to api consumer
-        :return: Response object
+        Response created return status code 201
+        :param response_value:
+        :return:
         """
         return Responses.response_base(data=response_value, status_code=201)
 
     @staticmethod
-    def accepted(data=list(), message=list()) -> Response:
+    def accepted(data="", message="") -> Response:
         """
-        Response ok return status code 200
-        :param response_value: json data returned to api consumer
-        :param message: message to inform API user
-        :return: Response object
+        Response accepted return status code 202
+        :param data: any data of response
+        :param message: message to inform user
+        :return:
         """
         return Responses.response_base(data=data, message=message, status_code=202)
 
     @staticmethod
-    def bad_request(message) -> Response:
+    def bad_request(message="Bad request") -> Response:
         """
         Response bad request return status code 400
         :param message: json data returned to api consumer
@@ -75,7 +75,7 @@ class Responses:
     @staticmethod
     def unauthorized(message="Unauthorized access") -> Response:
         """
-        Response type not found return status code 404
+        Response type access unauthorized
         :param message: display error message
         :return: Response object
         """
@@ -84,7 +84,7 @@ class Responses:
     @staticmethod
     def invalid_entity(message="Invalid field") -> Response:
         """
-        Response type not found return status code 404
+        Response type Invalid Entity
         :param message: display error message
         :return: Response object
         """

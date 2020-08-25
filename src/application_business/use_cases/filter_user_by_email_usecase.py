@@ -8,4 +8,9 @@ class FilterUserByEmailUseCase(IFilterUserByEmailUseCase):
         self.repository = repository
 
     def execute(self, email: str):
+        """
+        Filter in users table by email field
+        :param email:
+        :return:
+        """
         return self.repository.filter_by_email(email)

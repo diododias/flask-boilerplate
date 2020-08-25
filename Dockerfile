@@ -3,7 +3,7 @@ FROM python:3.7.7-buster
 MAINTAINER Luiz Dias <luiz.dias@altran.com.br>
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV APP_HOME=/scripts
+ENV APP_HOME=/app
 
 RUN echo "deb http://nginx.org/packages/mainline/debian/ buster nginx" >> /etc/apt/sources.list
 RUN wget https://nginx.org/keys/nginx_signing.key -O - | apt-key add -

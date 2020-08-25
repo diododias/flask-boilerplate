@@ -4,6 +4,9 @@ from src.application_business.services.responses_service import Responses
 
 
 class InputValidator:
+    """
+    Validate input data received by request on API
+    """
     @staticmethod
     def validate_json(schema: dict, json_data: dict):
         validator = Schema.from_dict(schema)

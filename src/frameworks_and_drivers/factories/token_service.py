@@ -5,7 +5,7 @@ from src.application_business.services.token_service import TokenService
 from src.frameworks_and_drivers.settings import settings_container, APP_ENV
 from src.application_business.use_cases.filter_token_by_token_usecase import FilterTokenByTokenUseCase
 from src.application_business.use_cases.invalidate_token_usecase import InvalidateTokenUseCase
-from src.application_business.use_cases.crete_token_entity_usecase import CreateTokenEntityUseCase
+from src.application_business.use_cases.create_token_entity_usecase import CreateTokenEntityUseCase
 from src.application_business.use_cases.get_auth_token_usecase import GetAuthTokenUseCase
 
 

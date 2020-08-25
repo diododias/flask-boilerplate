@@ -8,6 +8,9 @@ from src.frameworks_and_drivers.settings import settings_container, APP_ENV
 
 
 class PopulateInitialData(RepositoryBase):
+    """
+    Populate initial data on database with has no data
+    """
     def __init__(self, db_session: db.session):
         super().__init__(db_session)
         self._user_model = User

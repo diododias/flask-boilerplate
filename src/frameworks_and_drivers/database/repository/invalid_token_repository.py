@@ -6,7 +6,7 @@ from src.application_business.interfaces.invalid_token_repository import IInvali
 
 class InvalidTokenRepository(RepositoryBase, IInvalidTokenRepository):
     """
-    Interface to access database user model
+    Point to access invalid_tokens table on database
     """
     def __init__(self, db_session: db.session):
         super().__init__(db_session)

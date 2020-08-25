@@ -9,4 +9,9 @@ class FilterUserByIdUseCase(IFilterUserByIdUseCase):
         self.repository = repository
 
     def execute(self, id: UUID(as_uuid=True)):
+        """
+        Filter in users table by id field
+        :param id:
+        :return:
+        """
         return self.repository.filter_by_id(value=id)

@@ -10,7 +10,6 @@ services:
     networks:
       - flask-base-net
     restart: always
-    privileged: true
     tty: true
 
   flask-base-postgres:
@@ -24,7 +23,6 @@ services:
     networks:
       - flask-base-net        
     restart: always
-    privileged: true
     tty: true
 
   flask-base-pgadmin4:
@@ -42,7 +40,6 @@ services:
     links:
       - flask-base-postgres:db
     restart: always
-    privileged: true
     tty: true
 
   flask-base-sonarqube:
@@ -67,8 +64,29 @@ services:
     links:
       - flask-base-postgres:db         
     restart: always
-    privileged: true
     tty: true
+
+  flask-api:
+    container_name: flask-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - CACHE_REDIS_URL=redis://flask-base-redis:6379/0
+      - CACHE_DEFAULT_TIMEOUT=300
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_URL=flask-base-postgres:5432
+      - POSTGRES_DB=flask-base
+      - APP_ENV=production
+      - SECRET_KEY=7311a881f138d32a94994cef3e4b855e
+    depends_on:
+      - flask-base-postgres
+      - flask-base-redis
+    restart: always
+    ports:
+      - 5000:5000
+
 
 networks:
   flask-base-net:

@@ -10,6 +10,11 @@ from src.application_business.interfaces.get_auth_token_usecase import IGetAuthT
 
 
 class TokenService:
+    _secret: str
+    _filter_token: IFilterTokenByTokenUseCase
+    _create_entity: ICreateTokenEntityUseCase
+    _invalidate_token: IInvalidateTokenUseCase
+    _get_auth_token: IGetAuthTokenUseCase
 
     def __init__(self, create_token_entity_usecase: ICreateTokenEntityUseCase,
                  filter_token_by_token_usecase: IFilterTokenByTokenUseCase,
@@ -22,23 +27,33 @@ class TokenService:
         self._invalidate_token = invalidate_token_usecase
         self._get_auth_token = get_auth_token
 
-    def is_blacklisted(self, auth_token):
+    def is_blacklisted(self, auth_token) -> bool:
+        """
+        Verify if JWT Token is blacklisted
+        :param auth_token: JWT Token
+        :return: bool
+        """
         if self._filter_token.execute(auth_token):
             return True
         else:
             return False
 
     def include_token_blacklist(self, auth_token):
+        """
+        Save token in blacklist, to disallow JWT validation
+        :param auth_token:
+        :return: Invalidated token entity
+        """
         result = self._create_entity.execute(self._filter_token.execute(auth_token))
         if result:
             return result
         return self._invalidate_token.execute(auth_token)
 
-    def encode_auth_token(self, user_id):
+    def encode_auth_token(self, user_id) -> str:
         """
-        Generates the Auth Token
+        Generates the JWT Token
         param: user_id
-        :return: string
+        :return: JWT Token
         """
         try:
             payload = {
@@ -54,11 +69,10 @@ class TokenService:
         except Exception as e:
             return e
 
-    def decode_auth_token(self):
+    def decode_auth_token(self) -> dict:
         """
-        Validates the auth token
-        :param auth_token:
-        :return: integer|string
+        Consume JWT Token from Authorization header
+        :return: A dict with User ID and JWT Token
         """
         auth_token = self._get_auth_token.execute()
         try:

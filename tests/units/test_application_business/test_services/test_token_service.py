@@ -7,7 +7,7 @@ sys.path.insert(0, myPath + '/../../../')
 import pytest
 import uuid
 from flask import request
-from mock import patch, MagicMock
+from mock import MagicMock
 from src.application_business.services.token_service import TokenService
 from src.application_business.interfaces.create_token_entity_usecase import ICreateTokenEntityUseCase
 from src.application_business.interfaces.filter_token_by_token_usecase import IFilterTokenByTokenUseCase
@@ -72,7 +72,6 @@ def test_decode_auth_token_invalid_token():
     get_token_mock.execute.return_value = "INVALID TOKEN"
     with pytest.raises(Exception):
         token_service.decode_auth_token()
-
 
 
 def test_decode_auth_token_successfull():

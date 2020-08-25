@@ -3,7 +3,6 @@ import uuid
 from datetime import datetime
 from sqlalchemy.dialects.postgresql import UUID
 from src.frameworks_and_drivers.database import db
-from sqlalchemy import Column, String, Boolean, DateTime
 from sqlalchemy.orm import relationship
 from src.frameworks_and_drivers.security import bcrypt
 from src.frameworks_and_drivers.database.models.users_roles_model import users_roles
@@ -12,14 +11,14 @@ from src.frameworks_and_drivers.database.models.users_roles_model import users_r
 class User(db.Model):
     __tablename__ = "users"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
-    email = Column(String, unique=True, index=True)
-    password = Column(String)
-    first_name = Column(String, index=True)
-    last_name = Column(String, index=True)
-    is_superuser = Column(Boolean(), default=False)
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
+    email = db.Column(db.String, unique=True, index=True)
+    password = db.Column(db.String)
+    first_name = db.Column(db.String, index=True)
+    last_name = db.Column(db.String, index=True)
+    is_superuser = db.Column(db.Boolean(), default=False)
     roles = relationship("Role", secondary=users_roles, back_populates="users")
-    created_at = Column(DateTime, default=datetime.utcnow(), index=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow(), index=True)
 
     def __init__(self, first_name: str,
                  last_name: str,

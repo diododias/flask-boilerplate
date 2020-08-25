@@ -4,9 +4,13 @@ from src.application_business.interfaces.create_user_entity_usecase import ICrea
 
 
 class CreateUserEntityUseCase(ICreateUserEntityUseCase):
-
     @staticmethod
     def execute(cursor: db.Model):
+        """
+        Convert user model returned from db in a user entity, if cursor is not a db Model
+        :param cursor: data returned by database
+        :return:
+        """
         if not isinstance(cursor, type(db.Model)):
             return cursor
         return UserEntity(

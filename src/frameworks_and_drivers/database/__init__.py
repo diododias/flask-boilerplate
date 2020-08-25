@@ -7,6 +7,11 @@ migrate = Migrate()
 
 
 def init_app(app):
+    """
+    Start db context
+    :param app:
+    :return:
+    """
     db.init_app(app)
     with app.app_context():
         db.create_all()

@@ -14,6 +14,11 @@ from src.frameworks_and_drivers.healthchecks.healthchecks import init_app as hea
 
 
 def init_app(app):
+    """
+    Init flask services and dependencies
+    :param app: flask app
+    :return:
+    """
     app.logger.info(f'Configure app in {APP_ENV} environment')
     app.config.from_object(settings_container.get(APP_ENV))
     flask_api_doc(app,

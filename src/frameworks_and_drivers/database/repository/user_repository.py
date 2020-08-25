@@ -7,7 +7,7 @@ from src.application_business.interfaces.user_repository import IUserRepository
 
 class UserRepository(RepositoryBase, IUserRepository):
     """
-    Interface to access database user model
+    Point to access user table on database
     """
     def __init__(self, db_session: db.session):
         super().__init__(db_session)

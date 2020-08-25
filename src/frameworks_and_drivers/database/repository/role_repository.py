@@ -4,6 +4,9 @@ from src.frameworks_and_drivers.database.repository.base_repository import Repos
 
 
 class RoleRepository(RepositoryBase):
+    """
+    Point to access roles table on database
+    """
     def __init__(self, db_session: db.session):
         super().__init__(db_session)
         self._role_model = Role

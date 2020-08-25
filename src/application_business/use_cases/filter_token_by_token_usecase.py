@@ -8,4 +8,9 @@ class FilterTokenByTokenUseCase(IFilterTokenByTokenUseCase):
         self.repository = repository
 
     def execute(self, auth_token: str):
+        """
+        Filter in invalid_tokens table by token field
+        :param auth_token: JWT Token
+        :return: Found Token or None
+        """
         return self.repository.filter_by_token(auth_token)

@@ -4,9 +4,8 @@ from src.application_business.interfaces.base_repository import IBaseRepository
 
 class RepositoryBase(IBaseRepository):
     """
-    Interface to access database user model
+    Point to access database tables
     """
-
     def __init__(self, db_session: db.session):
         self._db_session = db_session
 
