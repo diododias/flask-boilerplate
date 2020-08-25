@@ -1,0 +1,7 @@
+*pyc
+*venv
+venv/*
+migrations/*
+.scannerwork/*
+.coverage
+coverage/*
