@@ -1,12 +1,9 @@
 # flask-boilerplate
 `description english version coming`
 
-Este projeto é o resultado do estudo em desenvolvimento de APIs Restful baseado em Flask
+Depois de desenvolver diversos projetos flask, eu pensei em criar um projeto que pudesse servir de base ou referência para qualquer tipo de aplicação, que seja fácil de expandir sem que seu crescimento se torne uma bagunça.
 
-O objetivo foi desenvolver um repositório que sirva de base para qualquer projeto Flask, sua arquitetura facilita o crescimento robusto para qualquer tamanho e complexidade de aplicação.
-
-Esse repositório foi desenvolvido em camadas, seguindo os conceitos do Clean Architecture.
-
+Seguindo boas praticas de desenvolvimento de API's e conceitos de Clean Architecture, esse projeto vai servir de referência para qualquer tipo de aplicação flask
 
 ### Requisitos
 
@@ -27,23 +24,37 @@ Esse repositório foi desenvolvido em camadas, seguindo os conceitos do Clean Ar
 - Bcrypt: Encriptação de senhas
 - Redis: Cache dos dados processados
 
-### Iniciar Infraestrutura
+## Iniciar a Aplicação
+
+Toda aplicação foi desenvolvida para ser executado em containers
+
+Inicie os containers com o comando abaixo
 
 `docker-compose up -d`
 
-### Iniciar o banco de dados
+#### Iniciar o banco de dados
 
 A persistência de dados do postgres é realizada no diretório **docker/data-persistence**
 
-A criação dos bancos de dados está no script **docker/init.sql**
+A criação dos bancos de dados está no script **docker/init.sql** e é executada na inicialização do banco
 
-O Comando abaixo vai criar as tabelas do banco
+O Comando abaixo vai criar as tabelas do banco seguindo o schema das entidades
 
 `docker exec -it flask-api flask db init`
 
-### Aplicar migrações 
+#### Aplicar migrações 
 
 `docker exec -it flask-api flask db migrate`
+
+#### Acessar o Swagger
+
+URL: `http://localhost/swagger` 
+
+#### Acessar o healthcheck
+
+URL: `http://localhost/healthcheck`
+
+## Qualidade de código
 
 ### test
 `pytest --cov-report html:coverage/ --cov-report term-missing --cov-report xml:coverage/cov.xml --cov=src/ tests/`
@@ -61,12 +72,11 @@ Substitua o LOGIN_TOKEN no comando abaixo pelo token criado
 
 ### Executar API em ambiente de desenvolvimento
 
-export FLASK_ENV=development
-export FLASK_APP=wsgi.py
-flask run
+`export FLASK_ENV=development`
+`export FLASK_APP=wsgi.py`
+`flask run`
 
-
-### Clean Architecture
+## Clean Architecture
 
 Esse projeto foi desenvolvido seguindo os conceitos do Clean Architecture / Arquitetura Hexagonal
 cada componente foi desenvolvido de forma isolada, minimizando ao máximo o acoplamento
