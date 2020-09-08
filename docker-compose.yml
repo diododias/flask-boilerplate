@@ -17,7 +17,8 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
     volumes:
-      - ./data-persist:/var/lib/postgresql/data
+      - ./docker/database-persistence:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
     restart: always
@@ -71,7 +72,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_URL=flask-base-postgres:5432
-      - POSTGRES_DB=flask-base
+      - POSTGRES_DB=flask_api
       - APP_ENV=production
       - SECRET_KEY=7311a881f138d32a94994cef3e4b855e
     depends_on:

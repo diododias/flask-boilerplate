@@ -18,7 +18,6 @@ flask-migrate
 Flask-Restless==0.16.0
 Flask-JWT==0.3.2
 Flask-Security==1.7.5
-Flask-Admin==1.5.1
 passlib
 jwt
 greenlet==0.4.15
