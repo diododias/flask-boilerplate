@@ -1,6 +1,6 @@
 import os
 
-APP_ENV = os.environ.get('APP_ENV', 'production')
+APP_ENV = os.environ.get('FLASK_ENV', 'production')
 
 
 class BaseConfig(object):
@@ -19,7 +19,7 @@ class BaseConfig(object):
     POSTGRES_USER = os.environ.get('POSTGRES_USER', 'postgres')
     POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD', 'postgres')
     POSTGRES_URL = os.environ.get('POSTGRES_URL', 'localhost:5432')
-    POSTGRES_DB = os.environ.get('POSTGRES_DB', 'flask-base')
+    POSTGRES_DB = os.environ.get('POSTGRES_DB', 'flask_api')
     DB_URL = f'postgresql+psycopg2://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_URL}/{POSTGRES_DB}'
     SQLALCHEMY_DATABASE_URI = DB_URL
     SQLALCHEMY_TRACK_MODIFICATIONS = os.environ.get('SQLALCHEMY_TRACK_MODIFICATIONS', False)

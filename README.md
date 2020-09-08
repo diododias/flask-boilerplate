@@ -1,12 +1,69 @@
 # flask-boilerplate
 `description english version coming`
 
-Este projeto é o resultado de um estudo em desenvolvimento de APIs Restful baseado em Flask
+Este projeto é o resultado do estudo em desenvolvimento de APIs Restful baseado em Flask
 
-O objetivo foi desenvolver um repositório que sirva de base para qualquer projeto Flask, sua arquitetura precisa facilitar o crescimento robusto sem impactos na sua estrutura.
-deve ser fácil de dar manutenção e simples de compreender
+O objetivo foi desenvolver um repositório que sirva de base para qualquer projeto Flask, sua arquitetura facilita o crescimento robusto para qualquer tamanho e complexidade de aplicação.
 
-Sua arquitetura segue os conceitos do Clean Architecture
+Esse repositório foi desenvolvido em camadas, seguindo os conceitos do Clean Architecture.
+
+
+### Requisitos
+
+- Python 3.7+
+- Docker
+
+### Tecnologias
+
+- Flask: Framework de desenvolvimento de API's Restful
+- Docker: Infraestrutura entregue em containers
+- Gunicorn: WSGI Server para disponibilizar a API Flask, configurado com gevent.
+- Nginx: Proxy Reverso que serve como ponte de acesso a API e porta de entrada aos usuários.
+- Marshmallow: Validação de valores enviados nas requisições
+- Sqlalchemy: Framework de acesso ao banco de dados
+- healthcheck: Healthcheck dos serviços de backend necessários para o funcionamento da API
+- Swagger UI: Contrato de dados da API
+- JWT: Mecanismo de autenticação
+- Bcrypt: Encriptação de senhas
+- Redis: Cache dos dados processados
+
+### Iniciar Infraestrutura
+
+`docker-compose up -d`
+
+### Iniciar o banco de dados
+
+A persistência de dados do postgres é realizada no diretório **docker/data-persistence**
+
+A criação dos bancos de dados está no script **docker/init.sql**
+
+O Comando abaixo vai criar as tabelas do banco
+
+`docker exec -it flask-api flask db init`
+
+### Aplicar migrações 
+
+`docker exec -it flask-api flask db migrate`
+
+### test
+`pytest --cov-report html:coverage/ --cov-report term-missing --cov-report xml:coverage/cov.xml --cov=src/ tests/`
+
+### lint
+
+`flake8`
+
+### SonarQube check
+Antes de executar o Sonar Scanner, crie um projeto e um token
+
+Substitua o LOGIN_TOKEN no comando abaixo pelo token criado
+
+`sonar-scanner  -Dsonar.projectKey=flask-boilerplate -Dsonar.sources=. -Dsonar.host.url=http://localhost:9000 -Dsonar.login="LOGIN_TOKEN" -Dsonar.exclusions=coverage/*,tests,migrations,docs,docker,coverage`
+
+### Executar API em ambiente de desenvolvimento
+
+export FLASK_ENV=development
+export FLASK_APP=wsgi.py
+flask run
 
 
 ### Clean Architecture
@@ -46,55 +103,10 @@ Nessa camada é implementado o serviço fornecido pelos endpoints, onde é o pon
 utiliza dos casos de uso como dependencia para implementação dos algoritimos de serviço
 
  
-### Requisitos
-
-- python3.7+
-- redis
-- postgres
-
-### Tecnologias
-
-- marshmallow
-- sqlalchemy
-- healthcheck
-- swagger ui
-- docker
-- gunicorn
-- nginx
-- supervisor
 
 
-### Start infrastructure
 
-docker-compose up -d
 
-### create database 
-### flask-base
-
-#instructions
-
-### Init database schemas
-
-flask db init
-flask db migrate
-
-### test
-pytest --cov-report html:coverage/ --cov-report term-missing --cov-report xml:coverage/cov.xml --cov=src/ tests/
-
-### lint
-
-flake8
-
-### SonarQube check
-
-sonar-scanner  -Dsonar.projectKey=flask-boilerplate -Dsonar.sources=. -Dsonar.host.url=http://localhost:9000 -Dsonar.login="LOGIN_TOKEN" -Dsonar.exclusions=coverage/*,tests,migrations,docs,docker,coverage
-
-### Run API in development environment
-
-export APP_ENV=development
-export FLASK_ENV=development
-export FLASK_APP=wsgi.py
-flask run
 
 ## TODO
 
