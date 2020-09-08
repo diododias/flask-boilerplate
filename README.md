@@ -68,7 +68,8 @@ utiliza dos casos de uso como dependencia para implementação dos algoritimos d
 
 docker-compose up -d
 
-### create database
+### create database 
+### flask-base
 
 #instructions
 
