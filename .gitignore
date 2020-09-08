@@ -1,7 +1,10 @@
 *pyc
 *venv
-venv/*
-migrations/*
-.scannerwork/*
+venv/
+migrations/
+.scannerwork/
 .coverage
-coverage/*
+coverage/
+.idea
+data-persist/
+*.DS_Store*
