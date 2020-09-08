@@ -73,7 +73,9 @@ Substitua o LOGIN_TOKEN no comando abaixo pelo token criado
 ### Executar API em ambiente de desenvolvimento
 
 `export FLASK_ENV=development`
+
 `export FLASK_APP=wsgi.py`
+
 `flask run`
 
 ## Clean Architecture
@@ -106,16 +108,10 @@ Nessa camada é implementado os controllers, responsável por definir os endpoin
 Nessa camada é implementado o caso de uso. 
 Cada caso de uso é uma parte minima responsável por apenas uma tarefa, os casos de uso são utilizados pelos serviços.
 
-
 ##### Serviços
 
 Nessa camada é implementado o serviço fornecido pelos endpoints, onde é o ponto central da logica do negócio,
 utiliza dos casos de uso como dependencia para implementação dos algoritimos de serviço
-
- 
-
-
-
 
 
 ## TODO
