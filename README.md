@@ -123,7 +123,3 @@ utiliza dos casos de uso como dependencia para implementação dos algoritimos d
 - Pode ser incluso um endpoint para associar as roles ao usuário
 - Pode ser incluso um endpoint para definir um usuário como administrador
 - Melhorar README.me com versão em inglês, e explicar melhor a interação entre as camadas
-
- 
-
-
