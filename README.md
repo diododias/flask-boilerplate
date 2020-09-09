@@ -66,6 +66,8 @@ URL: `http://localhost/healthcheck`
 
 ## Executar API localmente
 
+É necessário que esteja de pé os containers postgres e redis
+
 ### Instale as dependencias
 `pip install -r requirements.txt --upgrade`
 
