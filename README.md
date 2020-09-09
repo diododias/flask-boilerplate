@@ -1,5 +1,5 @@
 # flask-boilerplate
-`description english coming later`
+`english description coming later`
 
 Depois de desenvolver diversos projetos flask, eu pensei em criar um projeto que pudesse servir de base ou referência para qualquer tipo de aplicação, que seja fácil de expandir sem que seu crescimento se torne uma bagunça.
 
