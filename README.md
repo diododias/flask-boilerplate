@@ -1,9 +1,20 @@
 # flask-boilerplate
-`description english version coming`
+`description english coming later`
 
 Depois de desenvolver diversos projetos flask, eu pensei em criar um projeto que pudesse servir de base ou referência para qualquer tipo de aplicação, que seja fácil de expandir sem que seu crescimento se torne uma bagunça.
 
 Seguindo boas praticas de desenvolvimento de API's e conceitos de Clean Architecture, esse projeto vai servir de referência para qualquer tipo de aplicação flask
+
+Incluso nesse projeto:
+  - Cadastro de usuário, encriptação de senha com bcrypt
+  - Login, com autenticação JWT
+  - Status do usuário
+  - Logout
+  - Endpoint hello world com cache no redis para servir de referência
+  - Swagger
+  - Healthcheck dos serviços dependentes
+  - banco de dados Postgres
+  - Infraestrutura em docker
 
 ### Requisitos
 
@@ -14,10 +25,11 @@ Seguindo boas praticas de desenvolvimento de API's e conceitos de Clean Architec
 
 - Flask: Framework de desenvolvimento de API's Restful
 - Docker: Infraestrutura entregue em containers
+- Postgres: banco de dados relacional
+- Sqlalchemy: Framework de acesso ao banco de dados
 - Gunicorn: WSGI Server para disponibilizar a API Flask, configurado com gevent.
 - Nginx: Proxy Reverso que serve como ponte de acesso a API e porta de entrada aos usuários.
 - Marshmallow: Validação de valores enviados nas requisições
-- Sqlalchemy: Framework de acesso ao banco de dados
 - healthcheck: Healthcheck dos serviços de backend necessários para o funcionamento da API
 - Swagger UI: Contrato de dados da API
 - JWT: Mecanismo de autenticação
@@ -26,19 +38,17 @@ Seguindo boas praticas de desenvolvimento de API's e conceitos de Clean Architec
 
 ## Iniciar a Aplicação
 
-Toda aplicação foi desenvolvida para ser executado em containers
-
 Inicie os containers com o comando abaixo
 
-`docker-compose up -d`
+`docker-compose up -d --build`
 
 #### Iniciar o banco de dados
 
 A persistência de dados do postgres é realizada no diretório **docker/data-persistence**
 
-A criação dos bancos de dados está no script **docker/init.sql** e é executada na inicialização do banco
+A criação dos bancos é feita via script **docker/init.sql** executada na inicialização do banco
 
-O Comando abaixo vai criar as tabelas do banco seguindo o schema das entidades
+O Comando abaixo vai criar as tabelas do banco conforme o schema das entidades
 
 `docker exec -it flask-api flask db init`
 
@@ -53,6 +63,21 @@ URL: `http://localhost/swagger`
 #### Acessar o healthcheck
 
 URL: `http://localhost/healthcheck`
+
+## Executar API localmente
+
+### Instale as dependencias
+`pip install -r requirements.txt --upgrade`
+
+### Configure as variaveis de ambiente de desenvolvimento
+
+`export FLASK_ENV=development`
+
+`export FLASK_APP=wsgi.py`
+
+### Execute o flask
+
+`flask run`
 
 ## Qualidade de código
 
@@ -69,14 +94,6 @@ Antes de executar o Sonar Scanner, crie um projeto e um token
 Substitua o LOGIN_TOKEN no comando abaixo pelo token criado
 
 `sonar-scanner  -Dsonar.projectKey=flask-boilerplate -Dsonar.sources=. -Dsonar.host.url=http://localhost:9000 -Dsonar.login="LOGIN_TOKEN" -Dsonar.exclusions=coverage/*,tests,migrations,docs,docker,coverage`
-
-### Executar API em ambiente de desenvolvimento
-
-`export FLASK_ENV=development`
-
-`export FLASK_APP=wsgi.py`
-
-`flask run`
 
 ## Clean Architecture
 
